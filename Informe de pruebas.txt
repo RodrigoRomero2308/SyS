@@ -1,0 +1,20 @@
+Con constantes y mientras no hay problema
+LeerLista no está implementado en codigo pero si en TAS?
+EscribirLista tampoco
+Basicamente no hay soporte para listas
+--------------------------------------------------
+17 de Julio
+Trabajando sobre listas
+--------------------------------------------------
+27 de Julio
+Desabilitado el interprete hasta corroborar que la TAS funcione
+--------------------------------------------------
+28 de Julio
+Problemas con el condicional, el analisis nunca termina
+La cague en algo xq ahora no anda nada
+Ok, ahora parece que todo anda pero hay q poner un caracter o un enter mas al final
+RIP: Gramatica Ambigua
+Problemas con las operaciones aritmeticas (posible no reconocimiento de los operadores)
+--------------------------------------------------
+Manejar el resultado como un array de dos valores [lista, value]
+Y manejarse cuando uno de los dos está indefinido

@@ -1,0 +1,12 @@
+A:= [8,4,5,3,2];
+B:= first(A);
+escribirentero("El primer numero de la lista es: ", B);
+C:= cons(B, A);
+escribirlista("La lista con el primer elemento añadido de nuevo al principio es: ", C);
+D:= rest(A);
+escribirlista("La lista sin el primer elemento es: ", D);
+si null(A) entonces
+escribirlista("La lista esta vacia: ", A);
+sino
+escribirlista("La lista no esta vacia: ", A);
+fin;

@@ -1,0 +1,2 @@
+A:=[45,72,81,2];
+escribir("La lista es: ", A);

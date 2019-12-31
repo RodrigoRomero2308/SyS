@@ -1,0 +1,12 @@
+leerentero("Ingrese un numero: ", A);
+leerentero("Ingrese otro numero: ", B);
+escribirentero("El numero A es: ", A);
+escribirentero("El numero B es: ", B);
+C:=A+B;
+escribirentero("La suma es: ", C);
+C:=A-B;
+escribirentero("La resta es: ", C);
+C:=A*B;
+escribirentero("La multiplicacion es: ", C);
+C:=A/B;
+escribirentero("La division es: ", C);

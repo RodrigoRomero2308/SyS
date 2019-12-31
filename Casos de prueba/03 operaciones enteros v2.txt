@@ -1,0 +1,2 @@
+leerentero("Ingrese un numero: ", A);
+escribirentero("El numero A+2 es: ", A+2);

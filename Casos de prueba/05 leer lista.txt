@@ -1,0 +1,2 @@
+leerlista("Ingrese una lista: ", A);
+escribirlista("La lista ingresada fue: ", A);

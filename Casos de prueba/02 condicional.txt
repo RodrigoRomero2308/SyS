@@ -1,0 +1,10 @@
+leerentero("Ingresar un numero: ", A);
+leerentero("Ingresar otro numero: ", B);
+si A>B entonces 
+escribirentero("El primer numero es mayor que el segundo: ", A);
+fin;
+si A<B entonces
+escribirentero("El segundo numero es mayor que el primero: ", B);
+sino
+escribirentero("Los numeros son iguales: ", A);
+fin;

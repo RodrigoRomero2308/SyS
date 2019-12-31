@@ -1,0 +1,21 @@
+	$	fin	hacer	mientras	parentesis2	parentesis1	null	oprel	sino	entonces	si	coma	cadena	escribir	id	leerLista	leerEntero	oparit	consent	first	corchete2	corchete1	cons	rest	opasig	puntoycoma
+Programa	 	 	 	Programa → Sentencia puntoycoma Programa2	 	 	 	 	 	 	Programa → Sentencia puntoycoma Programa2	 	 	Programa → Sentencia puntoycoma Programa2	Programa → Sentencia puntoycoma Programa2	Programa → Sentencia puntoycoma Programa2	Programa → Sentencia puntoycoma Programa2	 	 	 	 	 	 	 	 	 
+Programa2	Programa2 → &epsilon	Programa2 → &epsilon	 	Programa2 → Programa	 	 	 	 	Programa2 → &epsilon	 	Programa2 → Programa	 	 	Programa2 → Programa	Programa2 → Programa	Programa2 → Programa	Programa2 → Programa	 	 	 	 	 	 	 	 	 
+Sentencia	 	 	 	Sentencia → Ciclo	 	 	 	 	 	 	Sentencia → Condicional	 	 	Sentencia → Escritura	Sentencia → Asig	Sentencia → Lectura	Sentencia → Lectura	 	 	 	 	 	 	 	 	 
+Asig	 	 	 	 	 	 	 	 	 	 	 	 	 	 	Asig → id opasig Expresion	 	 	 	 	 	 	 	 	 	 	 
+Expresion	 	 	 	 	 	Expresion → Exparit	 	 	 	 	 	 	 	 	Expresion → Exparit	 	 	 	Expresion → Exparit	Expresion → Exparit	 	Expresion → Explista	Expresion → Explista	Expresion → Explista	 	 
+Explista	 	 	 	 	 	 	 	 	 	 	 	 	 	 	 	 	 	 	 	 	 	Explista → Lista	Explista → Oplista	Explista → Oplista	 	 
+Oplista	 	 	 	 	 	 	 	 	 	 	 	 	 	 	 	 	 	 	 	 	 	 	Oplista → cons parentesis1 Exparit coma Explista parentesis2	Oplista → rest parentesis1 Explista parentesis2	 	 
+Lista	 	 	 	 	 	 	 	 	 	 	 	 	 	 	 	 	 	 	 	 	 	Lista → corchete1 Listanum corchete2	 	 	 	 
+Listanum	 	 	 	 	 	 	 	 	 	 	 	 	 	 	 	 	 	 	Listanum → consent Listanum2	 	 	 	 	 	 	 
+Listanum2	 	 	 	 	 	 	 	 	 	 	 	Listanum2 → coma Listanum	 	 	 	 	 	 	 	 	Listanum2 → &epsilon	 	 	 	 	 
+Exparit	 	 	 	 	 	Exparit → parentesis1 Exparit parentesis2 Exparit2	 	 	 	 	 	 	 	 	Exparit → id Exparit2	 	 	 	Exparit → consent Exparit2	Exparit → first parentesis1 Explista parentesis2 Exparit2	 	 	 	 	 	 
+Exparit2	 	 	Exparit2 → &epsilon	 	Exparit2 → &epsilon	 	 	Exparit2 → &epsilon	 	Exparit2 → &epsilon	 	Exparit2 → &epsilon	 	 	 	 	 	Exparit2 → oparit Exparit	 	 	 	 	 	 	 	Exparit2 → &epsilon
+Lectura	 	 	 	 	 	 	 	 	 	 	 	 	 	 	 	Lectura → LeerL	Lectura → LeerE	 	 	 	 	 	 	 	 	 
+LeerE	 	 	 	 	 	 	 	 	 	 	 	 	 	 	 	 	LeerE → leerEntero parentesis1 cadena coma id parentesis2	 	 	 	 	 	 	 	 	 
+LeerL	 	 	 	 	 	 	 	 	 	 	 	 	 	 	 	LeerL → leerLista parentesis1 cadena coma id parentesis2	 	 	 	 	 	 	 	 	 	 
+Escritura	 	 	 	 	 	 	 	 	 	 	 	 	 	Escritura → escribir parentesis1 cadena coma Expresion parentesis2	 	 	 	 	 	 	 	 	 	 	 	 
+Condicional	 	 	 	 	 	 	 	 	 	 	Condicional → si Condicion entonces Programa Condicional1	 	 	 	 	 	 	 	 	 	 	 	 	 	 	 
+Condicional1	 	Condicional1 → fin	 	 	 	 	 	 	Condicional1 → sino Programa fin	 	 	 	 	 	 	 	 	 	 	 	 	 	 	 	 	 
+Condicion	 	 	 	 	 	Condicion → Exparit oprel Exparit	Condicion → null parentesis1 Explista parentesis2	 	 	 	 	 	 	 	Condicion → Exparit oprel Exparit	 	 	 	Condicion → Exparit oprel Exparit	Condicion → Exparit oprel Exparit	 	 	 	 	 	 
+Ciclo	 	 	 	Ciclo → mientras Condicion hacer Programa fin	 	 	 	 	 	 	 	 	 	 	 	 	 	 	 	 	 	 	 	 	 	 
