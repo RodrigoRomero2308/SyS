@@ -61,7 +61,7 @@ begin
             end;
 end;
 
-procedure evalExparit(arbol: Tarbol; var ts:TS; var resultado:real);
+procedure evalExparit(arbol: Tarbol; var ts:TS; var resultado:tResultado);       // revisar para que asigne valor real en un tResultado
 var
 res:real;
 numero:real;
