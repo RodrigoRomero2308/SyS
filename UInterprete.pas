@@ -63,15 +63,17 @@ end;
 
 procedure evalExparit(arbol: Tarbol; var ts:TS; var resultado:tResultado);       // revisar para que asigne valor real en un tResultado
 var
-res:real;
+res:tResultado;
 numero:real;
 codigoerror:integer;
+resultadoLista: tResultado;
 begin
      if arbol^.hijos[1]^.simbolos=consent then
             begin
                  val(arbol^.hijos[1]^.lexema, numero, codigoerror);        // convierte string en numero
                  if codigoerror = 0 then
-                    Resultado:=numero;                                     // resultado deberia ser de tipo tResultado
+                    resultado.numero:=numero;
+                    resultado.isReal:=true;                                     // resultado deberia ser de tipo tResultado
                  evalexparit2(arbol^.hijos[2], ts, res,resultado);
 			end
        else if arbol^.hijos[1]^.simbolos=id then
@@ -79,11 +81,17 @@ begin
 			     Resultado:= obtenervalor(ts, arbol^.hijos[1]^.lexema);
                     evalexparit2(arbol^.hijos[2], ts, res,resultado);
 			end
-   else if arbol^.hijos[1]^.simbolos=parentesis1 then
+       else if arbol^.hijos[1]^.simbolos=parentesis1 then
             begin
 			         evalexparit(arbol^.hijos[2], ts,resultado);
                      evalexparit2(arbol^.hijos[4], ts, res,resultado);
-			end;
+			end
+       else if arbol^.hijos[1]^.simbolos=first then
+            begin
+                    evalexplista(arbol^.hijos[2], ts, resultadoLista);
+                    resultado.numero:= 
+                    evalexparit2(arbol^.hijos[4], ts, res,resultado);
+            end;
 end;
 
 // ------------------------------------------------------------------------------------

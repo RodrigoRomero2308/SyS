@@ -34,7 +34,7 @@ Produccion= record
 tablaTAS= Array[Variables,Terminales] of Produccion;
 
 tResultado = record
-          real:real;
+          numero:real;
           lista:tLista;
           isReal:boolean;
           end;
