@@ -84,7 +84,7 @@ begin
 			end
        else if arbol^.hijos[1]^.simbolos=parentesis1 then
             begin
-			         evalexparit(arbol^.hijos[2], ts,resultado);
+			      evalexparit(arbol^.hijos[2], ts,resultado);
                      evalexparit2(arbol^.hijos[4], ts, res,resultado);
 			end
        else if arbol^.hijos[1]^.simbolos=first then
