@@ -110,6 +110,15 @@ begin
 		  end;
 end;
 
+procedure evalexplista(arbol: Tarbol; var ts:TS; var resultado: tResultado);
+
+begin
+     if arbol^.hijos[1]^.simbolos=oplista then
+          evaloplista(arbol^.hijos[1], ts, resultado)
+     else if arbol^.hijos[1]^.simbolos=lista then
+          evallista(arbol^.hijos[1], ts, resultado);
+end;
+
 
 // ------------------------------------------------------------------------------------
 
