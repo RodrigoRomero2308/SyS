@@ -53,11 +53,11 @@ procedure evalExpresion(arbol: Tarbol; var ts:TS; var resultado:tResultado);   /
 begin
         if arbol^.hijos[1]^.simbolos=exparit then
             begin
-			         evalexparit(arbol^.hijos[1], ts, resultado);     //esto real
-			end;
+		        evalexparit(arbol^.hijos[1], ts, resultado);     //esto real
+		  end;
         if arbol^.hijos[1]^.simbolos=explista then
             begin
-                     evalexplista(arbol^.hijos[1], ts, resultado);    //esto lista
+                  evalexplista(arbol^.hijos[1], ts, resultado);    //esto lista
             end;
 end;
 
