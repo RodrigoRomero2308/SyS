@@ -67,6 +67,7 @@ res:tResultado;
 numero:real;
 codigoerror:integer;
 resultadoLista: tResultado;
+x: longint;
 begin
      if arbol^.hijos[1]^.simbolos=consent then
             begin
@@ -89,7 +90,8 @@ begin
        else if arbol^.hijos[1]^.simbolos=first then
             begin
                     evalexplista(arbol^.hijos[2], ts, resultadoLista);
-                    resultado.numero:= 
+                    First(resultadoLista.lista, x);
+                    resultado.numero=x;
                     evalexparit2(arbol^.hijos[4], ts, res,resultado);
             end;
 end;
