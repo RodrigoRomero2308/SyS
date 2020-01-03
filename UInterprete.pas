@@ -97,6 +97,19 @@ begin
 end;
 
 
+procedure evalExparit2(arbol: Tarbol; var ts:TS; var res:real; var resultado:real);
+
+begin
+     if arbol^.hijos[1]^.simbolos=oparit then
+            begin
+		        evalexparit(arbol^.hijos[2], ts,res);
+                  if arbol^.hijos[1]^.lexema = '+' then resultado.numero:=resultado.numero + res.numero
+                  else if arbol^.hijos[1]^.lexema = '-' then resultado.numero:=resultado.numero - res.numero
+                  else if arbol^.hijos[1]^.lexema = '*' then resultado.numero:=resultado.numero * res.numero
+                  else if arbol^.hijos[1]^.lexema = '/' then resultado.numero:=resultado.numero / res.numero;
+		  end;
+end;
+
 
 // ------------------------------------------------------------------------------------
 
@@ -170,14 +183,12 @@ procedure evalExparit2(arbol: Tarbol; var ts:TS; var res:real; var resultado:rea
 begin
      if arbol^.hijos[1]^.simbolos=oparit then
             begin
-			        evalexparit(arbol^.hijos[2], ts,res);
-                    if arbol^.hijos[1]^.lexema = '+' then Resultado:=resultado + res
-                    else if arbol^.hijos[1]^.lexema = '-' then Resultado:=resultado - res
-                    else if arbol^.hijos[1]^.lexema = '*' then Resultado:=resultado * res
-                    else if arbol^.hijos[1]^.lexema = '/' then Resultado:=resultado / res;
-
-
-			end;
+		        evalexparit(arbol^.hijos[2], ts,res);
+                  if arbol^.hijos[1]^.lexema = '+' then resultado.numero:=resultado.numero + res.numero
+                  else if arbol^.hijos[1]^.lexema = '-' then resultado.numero:=resultado.numero - res.numero
+                  else if arbol^.hijos[1]^.lexema = '*' then resultado.numero:=resultado.numero * res.numero
+                  else if arbol^.hijos[1]^.lexema = '/' then resultado.numero:=resultado.numero / res.numero;
+		  end;
 end;
 
 procedure evalExparit(arbol: Tarbol; var ts:TS; var resultado:real);
