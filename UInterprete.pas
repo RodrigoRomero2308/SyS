@@ -119,9 +119,24 @@ begin
           evallista(arbol^.hijos[1], ts, resultado);
 end;
 
-procedure evaloplista(arbol: Tarbol; var ts:TS; var resultado: tResultado);
+procedure evaloplista(arbol: Tarbol; var ts:TS; var resultado: tResultado);}
+var
+resultadoLista:tResultado;
+resultadoArit:tResultado;
+
 begin
-     
+     if arbol^.hijos[1]^.simbolos=rest then
+     begin
+          evalexplista(arbol^.hijos[3], ts, resultadoLista);
+          resultado.lista:= Rest(resultadoLista.lista);
+     end
+     else if arbol^.hijos[1]^.simbolos=cons then
+     begin
+          evalexplista(arbol^.hijos[5], ts resultadoLista);
+          evalexparit(arbol^.hijos[3], ts, resultadoArit);
+          Cons(resultadoLista.lista, resultadoArit.numero);
+          resultado.lista:= resultadoLista.lista;
+     end;
 end;
 
 
