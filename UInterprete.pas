@@ -97,7 +97,7 @@ begin
 end;
 
 
-procedure evalExparit2(arbol: Tarbol; var ts:TS; var res:real; var resultado:real);
+procedure evalExparit2(arbol: Tarbol; var ts:TS; var res:real; var resultado:tResultado);
 
 begin
      if arbol^.hijos[1]^.simbolos=oparit then
@@ -117,6 +117,11 @@ begin
           evaloplista(arbol^.hijos[1], ts, resultado)
      else if arbol^.hijos[1]^.simbolos=lista then
           evallista(arbol^.hijos[1], ts, resultado);
+end;
+
+procedure evaloplista(arbol: Tarbol; var ts:TS; var resultado: tResultado);
+begin
+     
 end;
 
 
