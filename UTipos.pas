@@ -6,7 +6,7 @@ uses ULista;
 
 type
 
-Simbolos = (programa, programa2, sentencia, asig, expresion, explista, oplista, lista, listanum, listanum2, exparit, exparit2,
+Simbolos = (programa, programa2, sentencia, asig, expresion, explista, oplista, explistaoid, lista, listanum, listanum2, exparit, exparit2,
            lectura, leerE, leerL, escritura, condicional, condicional1, condicion, condicion2, ciclo,
            puntoycoma, id, opasig, rest, parentesis1, parentesis2, cons, consent, corchete1, corchete2, coma, first, oparit, leerEntero,
            leerLista, escribir, cadena, si, entonces, fin, sino, oprel, null, mientras, hacer, pesos, epsilon, error);
@@ -41,7 +41,7 @@ tResultado = record
 
 const
 
-stringSimbolos:array [programa..error] of string = ('programa', 'programa2', 'sentencia', 'asig', 'expresion', 'explista','oplista',
+stringSimbolos:array [programa..error] of string = ('programa', 'programa2', 'sentencia', 'asig', 'expresion', 'explista','oplista', 'explistaoid',
                                                     'lista', 'listanum', 'listanum2', 'exparit', 'exparit2', 'lectura', 'leerE', 'leerL',
                                                     'escritura', 'condicional', 'condicional1',
                                                     'condicion', 'condicion2', 'ciclo', 'puntoycoma', 'id', 'opasig', 'rest', 'parentesis1',

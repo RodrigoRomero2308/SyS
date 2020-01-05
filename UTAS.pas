@@ -94,12 +94,16 @@ begin
      insertarEnLista(TAS[oplista , cons ], parentesis1);
      insertarEnLista(TAS[oplista , cons ], exparit);
      insertarEnLista(TAS[oplista , cons ], coma);
-     insertarEnLista(TAS[oplista , cons ], explista);
+     insertarEnLista(TAS[oplista , cons ], explistaoid);
      insertarEnLista(TAS[oplista , cons ], parentesis2);
      insertarEnLista(TAS[oplista , rest ], rest);
      insertarEnLista(TAS[oplista , rest ], parentesis1);
-     insertarEnLista(TAS[oplista , rest ], explista);
+     insertarEnLista(TAS[oplista , rest ], explistaoid);
      insertarEnLista(TAS[oplista , rest ], parentesis2);
+     insertarEnLista(TAS[explostaoid, id], id);
+     insertarEnLista(TAS[explostaoid, corchete1], explista);
+     insertarEnLista(TAS[explostaoid, cons], explista);
+     insertarEnLista(TAS[explostaoid, rest], explista);
      insertarEnLista(TAS[lista , corchete1 ], corchete1);
      insertarEnLista(TAS[lista , corchete1 ], listanum);
      insertarEnLista(TAS[lista , corchete1 ], corchete2);
@@ -118,7 +122,7 @@ begin
      insertarEnLista(TAS[exparit , consent ], exparit2);
      insertarEnLista(TAS[exparit , first ], first);
      insertarEnLista(TAS[exparit , first ], parentesis1);
-     insertarEnLista(TAS[exparit , first ], explista);
+     insertarEnLista(TAS[exparit , first ], explistaoid);
      insertarEnLista(TAS[exparit , first ], parentesis2);
      insertarEnLista(TAS[exparit , first ], exparit2);
      insertarEnLista(TAS[exparit2 , hacer ], epsilon);
@@ -163,7 +167,7 @@ begin
      insertarEnLista(TAS[condicion , parentesis1 ], exparit);
      insertarEnLista(TAS[condicion , null ], null);
      insertarEnLista(TAS[condicion , null ], parentesis1);
-     insertarEnLista(TAS[condicion , null ], explista);
+     insertarEnLista(TAS[condicion , null ], explistaoid);
      insertarEnLista(TAS[condicion , null ], parentesis2);
      insertarEnLista(TAS[condicion , id ], exparit);
      insertarEnLista(TAS[condicion , id ], oprel);
