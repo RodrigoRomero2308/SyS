@@ -100,10 +100,10 @@ begin
      insertarEnLista(TAS[oplista , rest ], parentesis1);
      insertarEnLista(TAS[oplista , rest ], explistaoid);
      insertarEnLista(TAS[oplista , rest ], parentesis2);
-     insertarEnLista(TAS[explostaoid, id], id);
-     insertarEnLista(TAS[explostaoid, corchete1], explista);
-     insertarEnLista(TAS[explostaoid, cons], explista);
-     insertarEnLista(TAS[explostaoid, rest], explista);
+     insertarEnLista(TAS[explistaoid, id], id);
+     insertarEnLista(TAS[explistaoid, corchete1], explista);
+     insertarEnLista(TAS[explistaoid, cons], explista);
+     insertarEnLista(TAS[explistaoid, rest], explista);
      insertarEnLista(TAS[lista , corchete1 ], corchete1);
      insertarEnLista(TAS[lista , corchete1 ], listanum);
      insertarEnLista(TAS[lista , corchete1 ], corchete2);
