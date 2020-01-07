@@ -16,8 +16,8 @@ begin
      insertarenTS (tabla, 'rest', rest);
      insertarenTS (tabla, 'cons', cons);
      insertarenTS (tabla, 'first', first);
-     insertarenTS (tabla, 'leerentero', leerEntero);
-     insertarenTS (tabla, 'leerlista', leerLista);
+     insertarenTS (tabla, 'leerEntero', leerEntero);
+     insertarenTS (tabla, 'leerLista', leerLista);
      insertarenTS (tabla, 'escribir', escribir);
      insertarenTS (tabla, 'si', si);
      insertarenTS (tabla, 'entonces', entonces);

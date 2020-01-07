@@ -40,7 +40,7 @@ begin
                  desapilar(Pila, X, NodoPadre);
                  nodopadre^.lexema:=lexema;
                  obtenerSiguienteCompLex(Fuente, control, COMPLEX, lexema, tabladesimbolos);
-                 writeln('Desapila por igualdad: ', lexema);  //debug
+                 writeln('Desapila por igualdad: ', NodoPadre^.lexema);  //debug
                  end
 
 
@@ -55,7 +55,7 @@ begin
                      if TAS[Pila.tope^.info.Simbolo, COMPLEX].lista[1]<>epsilon then
                         begin
                         desapilar(Pila, X, NodoPadre);
-                        writeln('Desapila: ', lexema);   // debug
+                        writeln('Desapila: ', NodoPadre^.lexema);   // debug
                         for i:= 1 to TAS[X, COMPLEX].cantidad do
                             begin
                             crearnodo(nodoaux, TAS[X, COMPLEX].lista[i], stringsimbolos[TAS[X, COMPLEX].lista[i]]);
@@ -64,7 +64,7 @@ begin
                         for i:= nodopadre^.cantidad downto 1 do
                             begin
                             apilar(pila, nodopadre^.hijos[i]^.simbolos, nodopadre^.hijos[i]);
-                            writeln('Aplia: ', lexema); // debug
+                            writeln('Aplia: ', nodopadre^.hijos[i]^.lexema); // debug
                             end;
                         end
 
@@ -72,7 +72,7 @@ begin
 
                         begin
                         desapilar(Pila, X, NodoPadre);
-                        writeln('desapila', lexema);  // debug
+                        writeln('Desapila', NodoPadre^.lexema);  // debug
                         crearnodo(nodoaux, epsilon, 'epsilon');
                         insertarnodohijo(NodoPadre, nodoaux);
                         end;
@@ -86,7 +86,8 @@ begin
                   insertarnodohijo(nodoPadre, nodoaux);
                end;
               end;
-      writeln(stringSimbolos[Pila.tope^.info.Simbolo]);
+      writeln('Tope de la pila: ' + stringSimbolos[Pila.tope^.info.Simbolo]);
+      writeln('----------------------------------------------')
      until (Pila.tope^.info.Simbolo = pesos) or (errorStatus);
 
 end;

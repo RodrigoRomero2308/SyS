@@ -1,2 +1,4 @@
-A:=[45,72,81,2];
-escribir("La lista es: ", A);
+mientras A < 10 hacer
+ leerEntero("Nuevo B", B);
+fin;
+B:=25;
