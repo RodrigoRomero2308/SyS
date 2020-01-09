@@ -5,7 +5,7 @@ Interface
 uses crt, UTablaSim, UTipos, UArchivo;
 
 Procedure ObtenerSiguienteCompLex(Var Fuente:Tarchivo; Var Control:Longint; Var CompLex:simbolos;
-                                  var lexema:string; var Tabla:TS);
+                                  var lexema:string; var Tabla:TS; var endOfFile: boolean);
 
 Implementation
 
@@ -288,21 +288,22 @@ BEGIN
 End;
 
 Procedure ObtenerSiguienteCompLex(Var Fuente:Tarchivo; Var Control:Longint; Var CompLex:simbolos;
-                                   var lexema:string; var Tabla:TS);
+                                   var lexema:string; var Tabla:TS; var endOfFile: boolean);
 var
    pos:byte;
    caracter:char;
-   endOfFile:boolean;
+   // endOfFile:boolean;
 
 Begin
 
-endOfFile:=eof(fuente);
-if not(eof(fuente)) then
+if (endOfFile and debugMode) then writeln('Final del archivo');
+     
+if not(endOfFile) then
 begin
      leereg(fuente, control, caracter);
 end;
 
-while (not(eof(fuente))) and (caracter in [#0..#32]) do
+while (not(endOfFile)) and (caracter in [#0..#32]) do
       begin
       inc(control);
       leereg(fuente, control, caracter);
@@ -345,7 +346,7 @@ begin
      complex:=pesos;
      lexema:='$';
 end;
-
+endOfFile:=eof(fuente);
 End;
 
 

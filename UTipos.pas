@@ -48,6 +48,8 @@ stringSimbolos:array [programa..error] of string = ('programa', 'programa2', 'se
                                                     'parentesis2', 'cons', 'consent', 'corchete1', 'corchete2', 'coma', 'first','oparit',
                                                     'leerEntero', 'leerLista', 'escribir', 'cadena','si', 'entonces',
                                                     'fin', 'sino', 'oprel', 'null', 'mientras', 'hacer', 'pesos', 'epsilon', 'error');
+
+debugMode=true;
 implementation
 
 begin

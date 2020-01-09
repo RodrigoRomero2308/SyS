@@ -15,6 +15,7 @@ var
    errorStatus:boolean;
 
 BEGIN
+     // To change debug mode go to UTipos and change it in const sector
      errorStatus:=false;
      abreFile(archivo,Cruta+'archivo.txt');
      writeln('Archivo abierto');

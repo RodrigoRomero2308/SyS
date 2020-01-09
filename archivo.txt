@@ -1,4 +1,4 @@
-mientras A < 10 hacer
- leerEntero("Nuevo B", B);
+mientras A+B < 10 hacer
+A:=53221;
 fin;
-B:=25;
+B:=10;
