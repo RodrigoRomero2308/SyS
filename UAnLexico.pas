@@ -33,6 +33,8 @@ begin
 end;
 
 BEGIN
+     if debugMode then writeln('## -----------------------------------');
+     if debugMode then writeln('## Analisis: consent...');
      delta[0,numero]:=1;
      delta[0,otro]:=2;
      delta[1,otro]:=2;
@@ -42,25 +44,41 @@ BEGIN
 
      lexema:='';
      estadoactual:=q0;
-
+     if debugMode then writeln('## Consent analisis: Estado actual: ' + estadoactual);
      while (estadoactual<>2) and (not(eof(fuente))) do
          begin
+             if debugMode then writeln('##Consent analisis: Siguiente -------------------------');
              estadoanterior:=estadoactual;
              leereg(fuente, control, caracter);
+             if debugMode then writeln('## Consent analisis: Fin de archivo?: ' + eof(fuente));
+             if debugMode then writeln('## Consent analisis: Caracter' + caracter);
+             if debugMode then writeln('## Consent analisis: Control: ' + control);
              estadoactual:= delta [estadoactual, CarAsimb(caracter)];
              lexema:=lexema+caracter;
+             if debugMode then writeln('## Consent analisis: Estado actual: ' + estadoactual);
+             if debugMode then writeln('## Consent analisis: Lexema: ' + lexema);
              inc (control);
+             if debugMode then writeln('## Consent analisis: Control incrementado: ' + control);
+             if debugMode then writeln('## Consent analisis: Fin de archivo?: ' + eof(fuente));
          end;
 
      if (estadoactual = 2) then
      begin
+          if debugMode then writeln('## Consent analisis: Fin por estado actual = ' + estadoactual);
+          if debugMode then writeln('## Consent analisis: Es consent');
           dec(control);
+          if debugMode then writeln('## Consent analisis: Estado actual: ' + estadoactual);
+          if debugMode then writeln('## Consent analisis: Control: ' + control);
           Delete(lexema, length(lexema), 1);
+          if debugMode then writeln('## Consent analisis: Lexema final: ' + control);
           esconsent:= estadoanterior in F;
      end
 
      else
-         esconsent:= estadoactual in F
+     begin
+         if debugMode then writeln('## Consent analisis: No es consent');
+         esconsent:= estadoactual in F 
+     end;
 
 END;
 
@@ -69,7 +87,10 @@ function EsSimboloEspecial(var Fuente: Tarchivo;var Control:longint;var CompLex:
 var caracter : char;
 
 Begin
+     if debugMode then writeln('## -----------------------------------');
+     if debugMode then writeln('## Analisis: esSimboloEspecial...');
      leereg(fuente, control, caracter);
+     if debugMode then writeln('## SimboloEspecial analisis: Caracter: ' + caracter);
      lexema := caracter;
      if caracter in [';','[',']','(',',',')','+','-','*','/','=','<','>'] then
        case caracter of
@@ -168,10 +189,19 @@ Begin
                   inc(control);
                   EsSimboloEspecial:=true;
              end;
-        end
+        end;
 
         else
             EsSimboloEspecial:=false;
+     if (debugMode and EsSimboloEspecial) then 
+     begin
+          writeln('## SimboloEspecial analisis: Es simboloEspecial');
+          writeln('## SimboloEspecial analisis: Lexema: ' + lexema); 
+     end
+     else
+     begin
+          writeln('## SimboloEspecial analisis: No es simboloEspecial');
+     end;
 End;
 
 FUNCTION esidentificador (var fuente: Tarchivo; var control:longint; var lexema:string):boolean;
@@ -200,6 +230,8 @@ BEGIN
 END;
 
 BEGIN
+     if debugMode then writeln('## -----------------------------------');
+     if debugMode then writeln('## Analisis: esIdentificador...');
 	delta[0,letra]:=1;
 	delta[0,numero]:=2;
 	delta[0,guion]:=2;
@@ -215,23 +247,40 @@ BEGIN
 
 	estadoactual:=q0;
     lexema:='';
+    if debugMode then writeln('## Identificador analisis: Estado actual: ' + estadoactual);
 
     while (estadoactual <> 2) and (not(eof(fuente))) do
          begin
          estadoanterior:=estadoactual;
          leereg(fuente, control, caracter);
+         if debugMode then writeln('## Identificador analisis: Fin de archivo?: ' + eof(fuente));
+         if debugMode then writeln('## Identificador analisis: Caracter' + caracter);
+         if debugMode then writeln('## Identificador analisis: Control: ' + control);
          estadoactual:= delta [estadoactual, CarAsimb(caracter)];
          lexema:=lexema + caracter;
+         if debugMode then writeln('## Identificador analisis: Estado actual: ' + estadoactual);
+         if debugMode then writeln('## Identificador analisis: Lexema: ' + lexema);
          inc (control);
+         if debugMode then writeln('## Identificador analisis: Control incrementado: ' + control);
+         if debugMode then writeln('## Identificador analisis: Fin de archivo?: ' + eof(fuente));
          end;
      if (estadoactual = 2) then
         begin
+             if debugMode then writeln('## Identificador analisis: Fin por estado actual = ' + estadoactual);
+             if debugMode then writeln('## Identificador analisis: Es Identificador');
              dec(control);
+             if debugMode then writeln('## Identificador analisis: Estado actual: ' + estadoactual);
+             if debugMode then writeln('## Identificador analisis: Control: ' + control);
              Delete(lexema, length(lexema), 1);
+             if debugMode then writeln('## Identificador analisis: Lexema final: ' + control);
              esidentificador:= estadoanterior in F;
         end
      else
-        esidentificador:= estadoactual in F;
+     begin
+          if debugMode then writeln('## Identificador analisis: No es Identificador');
+          esidentificador:= estadoactual in F;
+     end;
+     
 End;
 
 FUNCTION escadena (var fuente: Tarchivo; var control:longint; var lexema:string):boolean;
@@ -257,6 +306,8 @@ BEGIN
 END;
 
 BEGIN
+     if debugMode then writeln('## -----------------------------------');
+     if debugMode then writeln('## Analisis: esIdentificador...');
 	delta[0,comilla]:=1;
 	delta[0,simbolos]:=3;
 	delta[1,comilla]:=2;
@@ -267,24 +318,39 @@ BEGIN
     delta[3,simbolos]:=3;
 
 	estadoactual:=q0;
-    lexema:='';
-
-    while (estadoactual <> 3) and (not(eof(fuente))) do
+     lexema:='';
+     if debugMode then writeln('## Identificador analisis: Estado actual: ' + estadoactual);
+     while (estadoactual <> 3) and (not(eof(fuente))) do
          begin
          estadoanterior:=estadoactual;
          leereg(fuente, control, caracter);
+         if debugMode then writeln('## Identificador analisis: Fin de archivo?: ' + eof(fuente));
+         if debugMode then writeln('## Identificador analisis: Caracter' + caracter);
+         if debugMode then writeln('## Identificador analisis: Control: ' + control);
          lexema := lexema + caracter;
          estadoactual:= delta [estadoactual, CarAsimb(caracter)];
+         if debugMode then writeln('## Identificador analisis: Estado actual: ' + estadoactual);
+         if debugMode then writeln('## Identificador analisis: Lexema: ' + lexema);
          inc (control);
+         if debugMode then writeln('## Identificador analisis: Control incrementado: ' + control);
+         if debugMode then writeln('## Identificador analisis: Fin de archivo?: ' + eof(fuente));
          end;
         if (estadoactual = 3) then
         begin
+             if debugMode then writeln('## Identificador analisis: Fin por estado actual = ' + estadoactual);
+             if debugMode then writeln('## Identificador analisis: Es Identificador');
              dec(control);
+             if debugMode then writeln('## Identificador analisis: Estado actual: ' + estadoactual);
+             if debugMode then writeln('## Identificador analisis: Control: ' + control);
              Delete(lexema, length(lexema), 1);
+             if debugMode then writeln('## Identificador analisis: Lexema final: ' + control);
              escadena:= estadoanterior in F;
         end
      else
-        escadena:= estadoactual in F;
+     begin
+          if debugMode then writeln('## Identificador analisis: No es Identificador');
+          escadena:= estadoactual in F;
+     end;
 End;
 
 Procedure ObtenerSiguienteCompLex(Var Fuente:Tarchivo; Var Control:Longint; Var CompLex:simbolos;
