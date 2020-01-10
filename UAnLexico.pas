@@ -250,7 +250,7 @@ BEGIN
          begin
          estadoanterior:=estadoactual;
          leereg(fuente, control, caracter);
-         if (debugMode and eof(fuente)) then writeln('## Consent analisis: Fin de archivo');
+         if (debugMode and eof(fuente)) then writeln('## Identificador analisis: Fin de archivo');
          if debugMode then writeln('## Identificador analisis: Caracter' + caracter);
          if debugMode then writeln('## Identificador analisis: Control: ' + IntToStr(control));
          estadoactual:= delta [estadoactual, CarAsimb(caracter)];
@@ -258,13 +258,13 @@ BEGIN
          if debugMode then writeln('## Identificador analisis: Lexema: ' + lexema);
          inc (control);
          if debugMode then writeln('## Identificador analisis: Control incrementado: ' + IntToStr(control));
-         if (debugMode and eof(fuente)) then writeln('## Consent analisis: Fin de archivo');
+         if (debugMode and eof(fuente)) then writeln('## Identificador analisis: Fin de archivo');
          end;
      if (estadoactual = 2) then
         begin
              if debugMode then writeln('## Identificador analisis: Es Identificador');
              dec(control);
-             if (debugMode and eof(fuente)) then writeln('## Consent analisis: Fin de archivo');
+             if (debugMode and eof(fuente)) then writeln('## Identificador analisis: Fin de archivo');
              if debugMode then writeln('## Identificador analisis: Control: ' + IntToStr(control));
              Delete(lexema, length(lexema), 1);
              if debugMode then writeln('## Identificador analisis: Lexema final: ' + IntToStr(control));
@@ -302,7 +302,7 @@ END;
 
 BEGIN
      if debugMode then writeln('## -----------------------------------');
-     if debugMode then writeln('## Analisis: esIdentificador...');
+     if debugMode then writeln('## Analisis: esCadena...');
 	delta[0,comilla]:=1;
 	delta[0,simbolos]:=3;
 	delta[1,comilla]:=2;
@@ -314,35 +314,35 @@ BEGIN
 
 	estadoactual:=q0;
      lexema:='';
-     if debugMode then writeln('## Identificador analisis: Estado actual: 0');
+     if debugMode then writeln('## Cadena analisis: Estado actual: 0');
      while (estadoactual <> 3) and (not(eof(fuente))) do
          begin
          estadoanterior:=estadoactual;
          leereg(fuente, control, caracter);
-         if (debugMode and eof(fuente)) then writeln('## Identificador analisis: Fin de archivo');
-         if debugMode then writeln('## Identificador analisis: Caracter' + caracter);
-         if debugMode then writeln('## Identificador analisis: Control: ' + IntToStr(control));
+         if (debugMode and eof(fuente)) then writeln('## Cadena analisis: Fin de archivo');
+         if debugMode then writeln('## Cadena analisis: Caracter' + caracter);
+         if debugMode then writeln('## Cadena analisis: Control: ' + IntToStr(control));
          lexema := lexema + caracter;
          estadoactual:= delta [estadoactual, CarAsimb(caracter)];
          
-         if debugMode then writeln('## Identificador analisis: Lexema: ' + lexema);
+         if debugMode then writeln('## Cadena analisis: Lexema: ' + lexema);
          inc (control);
-         if debugMode then writeln('## Identificador analisis: Control incrementado: ' + IntToStr(control));
-         if (debugMode and eof(fuente)) then writeln('## Identificador analisis: Fin de archivo');
+         if debugMode then writeln('## Cadena analisis: Control incrementado: ' + IntToStr(control));
+         if (debugMode and eof(fuente)) then writeln('## Cadena analisis: Fin de archivo');
          end;
         if (estadoactual = 3) then
         begin
-             if debugMode then writeln('## Identificador analisis: Es Identificador');
+             if debugMode then writeln('## Cadena analisis: Es Cadena');
              dec(control);
-             if debugMode then writeln('## Identificador analisis: Control: ' + IntToStr(control));
-             if (debugMode and eof(fuente)) then writeln('## Identificador analisis: Fin de archivo');
+             if debugMode then writeln('## Cadena analisis: Control: ' + IntToStr(control));
+             if (debugMode and eof(fuente)) then writeln('## Cadena analisis: Fin de archivo');
              Delete(lexema, length(lexema), 1);
-             if debugMode then writeln('## Identificador analisis: Lexema final: ' + IntToStr(control));
+             if debugMode then writeln('## Cadena analisis: Lexema final: ' + IntToStr(control));
              escadena:= estadoanterior in F;
         end
      else
      begin
-          if debugMode then writeln('## Identificador analisis: No es Identificador');
+          if debugMode then writeln('## Cadena analisis: No es Cadena');
           escadena:= estadoactual in F;
      end;
 End;
