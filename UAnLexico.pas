@@ -324,7 +324,7 @@ BEGIN
          if debugMode then writeln('## Identificador analisis: Control: ' + IntToStr(control));
          lexema := lexema + caracter;
          estadoactual:= delta [estadoactual, CarAsimb(caracter)];
-         if debugMode then writeln('## Identificador analisis: Estado actual: ' + estadoactual);
+         
          if debugMode then writeln('## Identificador analisis: Lexema: ' + lexema);
          inc (control);
          if debugMode then writeln('## Identificador analisis: Control incrementado: ' + IntToStr(control));
@@ -332,10 +332,8 @@ BEGIN
          end;
         if (estadoactual = 3) then
         begin
-             if debugMode then writeln('## Identificador analisis: Fin por estado actual = ' + estadoactual);
              if debugMode then writeln('## Identificador analisis: Es Identificador');
              dec(control);
-             if debugMode then writeln('## Identificador analisis: Estado actual: ' + estadoactual);
              if debugMode then writeln('## Identificador analisis: Control: ' + IntToStr(control));
              Delete(lexema, length(lexema), 1);
              if debugMode then writeln('## Identificador analisis: Lexema final: ' + IntToStr(control));
