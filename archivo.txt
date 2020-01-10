@@ -1,4 +1,3 @@
 mientras A+B < 10 hacer
 A:=53221;
 fin;
-B:=10;

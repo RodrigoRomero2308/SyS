@@ -319,7 +319,7 @@ BEGIN
          begin
          estadoanterior:=estadoactual;
          leereg(fuente, control, caracter);
-         if (debugMode and eof(fuente)) then writeln('## Consent analisis: Fin de archivo');
+         if (debugMode and eof(fuente)) then writeln('## Identificador analisis: Fin de archivo');
          if debugMode then writeln('## Identificador analisis: Caracter' + caracter);
          if debugMode then writeln('## Identificador analisis: Control: ' + IntToStr(control));
          lexema := lexema + caracter;
@@ -328,13 +328,14 @@ BEGIN
          if debugMode then writeln('## Identificador analisis: Lexema: ' + lexema);
          inc (control);
          if debugMode then writeln('## Identificador analisis: Control incrementado: ' + IntToStr(control));
-         if (debugMode and eof(fuente)) then writeln('## Consent analisis: Fin de archivo');
+         if (debugMode and eof(fuente)) then writeln('## Identificador analisis: Fin de archivo');
          end;
         if (estadoactual = 3) then
         begin
              if debugMode then writeln('## Identificador analisis: Es Identificador');
              dec(control);
              if debugMode then writeln('## Identificador analisis: Control: ' + IntToStr(control));
+             if (debugMode and eof(fuente)) then writeln('## Identificador analisis: Fin de archivo');
              Delete(lexema, length(lexema), 1);
              if debugMode then writeln('## Identificador analisis: Lexema final: ' + IntToStr(control));
              escadena:= estadoanterior in F;
