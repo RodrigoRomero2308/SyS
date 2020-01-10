@@ -66,7 +66,6 @@ BEGIN
           if debugMode then writeln('## Consent analisis: Es consent');
           dec(control);
           if (debugMode and eof(fuente)) then writeln('## Consent analisis: Fin de archivo');
-          if debugMode then writeln('## Consent analisis: Estado actual: ' + estadoactual);
           if debugMode then writeln('## Consent analisis: Control: ' + IntToStr(control));
           Delete(lexema, length(lexema), 1);
           if debugMode then writeln('## Consent analisis: Lexema final: ' + IntToStr(control));
@@ -188,7 +187,7 @@ Begin
                   inc(control);
                   EsSimboloEspecial:=true;
              end;
-        end;
+        end
 
         else
             EsSimboloEspecial:=false;
