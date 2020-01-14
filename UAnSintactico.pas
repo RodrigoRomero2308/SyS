@@ -35,29 +35,39 @@ begin
      obtenerSiguienteCompLex(Fuente, control, COMPLEX, lexema, tabladesimbolos, endOfFile);
      if (debugMode) then writeln('Siguiente componente lexico: ' + stringSimbolos[COMPLEX]);
      repeat
-           if Pila.tope^.info.Simbolo in [puntoycoma..pesos] then
+           if Pila.tope^.info.Simbolo in [puntoycoma..pesos] then // si es un terminal
 
               begin
+              if (debugMode) then writeln('Es terminal');
               if Pila.tope^.info.Simbolo=COMPLEX then
                  begin
+                 if (debugMode) then writeln('Es terminal donde Pila.tope^.info.Simbolo=COMPLEX');
                  desapilar(Pila, X, NodoPadre);
                  nodopadre^.lexema:=lexema;
                  obtenerSiguienteCompLex(Fuente, control, COMPLEX, lexema, tabladesimbolos, endOfFile);
                  if (debugMode) then writeln('Siguiente componente lexico: ' + stringSimbolos[COMPLEX]);
                  if (debugMode) then writeln('Desapila por igualdad: ', NodoPadre^.lexema);  //debug
                  end
-
+               
+               else
+                  begin
+                     errorStatus:= true;
+                     if (debugMode) then writeln('Error debido a desigualdad entre el tope de la pila y el componente lexico');
+                  end;
               end
 
-           else
+           else // es una variable, epsilon o error
 
               begin
+              if (debugMode) then writeln('No es terminal');
               if (debugMode) then writeln('Primer hijo del tope de la pila: ' + stringSimbolos[TAS[Pila.tope^.info.Simbolo, COMPLEX].lista[1]]);
                  if TAS[Pila.tope^.info.Simbolo, COMPLEX].lista[1]<>error then
 
                      begin
+                     if (debugMode) then writeln('No es error');
                      if TAS[Pila.tope^.info.Simbolo, COMPLEX].lista[1]<>epsilon then
                         begin
+                        if (debugMode) then writeln('No es epsilon');
                         desapilar(Pila, X, NodoPadre);
                         if (debugMode) then writeln('Desapila: ', NodoPadre^.lexema);   // debug
                         for i:= 1 to TAS[X, COMPLEX].cantidad do
@@ -75,10 +85,16 @@ begin
                      else                                 //si es epsilon
 
                         begin
+                        if (debugMode) then writeln('Es epsilon');
                         desapilar(Pila, X, NodoPadre);
                         if (debugMode) then writeln('Desapila por epsilon: ', NodoPadre^.lexema);  // debug
                         crearnodo(nodoaux, epsilon, 'epsilon');
                         insertarnodohijo(NodoPadre, nodoaux);
+                        if ((COMPLEX=pesos) and (Pila.tope^.info.Simbolo <> pesos)) then
+                           begin
+                           errorStatus:= true;
+                           if (debugMode) then writeln('Fin incorrecto de programa');
+                           end;
                         end;
 
                      end
