@@ -47,7 +47,7 @@ BEGIN
      if debugMode then writeln('## Consent analisis: Estado actual: 0');
      while (estadoactual<>2) and (not(eof(fuente))) do
          begin
-             if debugMode then writeln('##Consent analisis: Siguiente -------------------------');
+             if debugMode then writeln('## Consent analisis: Siguiente -------------------------');
              estadoanterior:=estadoactual;
              leereg(fuente, control, caracter);
              if (debugMode and eof(fuente)) then writeln('## Consent analisis: Fin de archivo');
@@ -65,6 +65,12 @@ BEGIN
      begin
           if debugMode then writeln('## Consent analisis: Es consent');
           dec(control);
+          dec(control);
+          if debugMode then writeln('## Restamos dos al control');
+          leereg(fuente, control, caracter);
+          if (debugMode and eof(fuente)) then writeln('## Sigue siendo el final del archivo') else if (debugMode) then writeln('## No es mas el final del archivo');
+          inc(control);
+          if debugMode then writeln('## Incrementamos para dejarlo al final');
           if (debugMode and eof(fuente)) then writeln('## Consent analisis: Fin de archivo');
           if debugMode then writeln('## Consent analisis: Control: ' + IntToStr(control));
           Delete(lexema, length(lexema), 1);
@@ -264,10 +270,16 @@ BEGIN
         begin
              if debugMode then writeln('## Identificador analisis: Es Identificador');
              dec(control);
+             dec(control);
+             if debugMode then writeln('## Restamos dos al control');
+             leereg(fuente, control, caracter);
+             if (debugMode and eof(fuente)) then writeln('## Sigue siendo el final del archivo') else if (debugMode) then writeln('## No es mas el final del archivo');
+             inc(control);
+             if debugMode then writeln('## Incrementamos para dejarlo al final');
              if (debugMode and eof(fuente)) then writeln('## Identificador analisis: Fin de archivo');
              if debugMode then writeln('## Identificador analisis: Control: ' + IntToStr(control));
              Delete(lexema, length(lexema), 1);
-             if debugMode then writeln('## Identificador analisis: Lexema final: ' + IntToStr(control));
+             if debugMode then writeln('## Identificador analisis: Lexema final: ' + lexema);
              esidentificador:= estadoanterior in F;
         end
      else
@@ -334,6 +346,12 @@ BEGIN
         begin
              if debugMode then writeln('## Cadena analisis: Es Cadena');
              dec(control);
+             dec(control);
+             if debugMode then writeln('## Restamos dos al control');
+             leereg(fuente, control, caracter);
+             if (debugMode and eof(fuente)) then writeln('## Sigue siendo el final del archivo') else if (debugMode) then writeln('## No es mas el final del archivo');
+             inc(control);
+             if debugMode then writeln('## Incrementamos para dejarlo al final');
              if debugMode then writeln('## Cadena analisis: Control: ' + IntToStr(control));
              if (debugMode and eof(fuente)) then writeln('## Cadena analisis: Fin de archivo');
              Delete(lexema, length(lexema), 1);
