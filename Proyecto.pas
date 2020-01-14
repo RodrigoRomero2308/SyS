@@ -27,7 +27,7 @@ BEGIN
           rewrite(f);
           guardararbol(f,raiz,0);          //transcribe el arbol a un txt
           close(f);
-          // evalPrograma(Raiz, tabla);
+          // evalPrograma(Raiz, tabla, errorStatus);
      end
      else
      begin
