@@ -89,7 +89,7 @@ begin
 			end
        else if arbol^.hijos[1]^.simbolos=first then
             begin
-                    evalexplista(arbol^.hijos[2], ts, resultadoLista);
+                    evalexplistaoid(arbol^.hijos[2], ts, resultadoLista);
                     First(resultadoLista.lista, x);
                     resultado.numero=x;
                     evalexparit2(arbol^.hijos[4], ts, res,resultado);
