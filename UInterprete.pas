@@ -60,14 +60,14 @@ procedure evalExpresion(arbol: Tarbol; var ts:TS; var resultado:tResultado; var 
 begin
      if (not(errorStatus)) then
      begin
-        if arbol^.hijos[1]^.simbolos=exparit then
-            begin
-		        evalexparit(arbol^.hijos[1], ts, resultado, errorStatus);     //esto real
-		  end;
-        if arbol^.hijos[1]^.simbolos=explista then
-            begin
-                  evalexplista(arbol^.hijos[1], ts, resultado, errorStatus);    //esto lista
-            end;
+          if arbol^.hijos[1]^.simbolos=exparit then
+               begin
+		          evalexparit(arbol^.hijos[1], ts, resultado, errorStatus);     //esto real
+		     end
+          else if arbol^.hijos[1]^.simbolos=explista then
+               begin
+                    evalexplista(arbol^.hijos[1], ts, resultado, errorStatus);    //esto lista
+               end;
      end;
 end;
 
@@ -88,24 +88,24 @@ begin
                          resultado.numero:=numero;
                          resultado.isReal:=true;                                     // resultado deberia ser de tipo tResultado
                          evalexparit2(arbol^.hijos[2], ts, res,resultado, errorStatus);
-                    end
+               end
           else if arbol^.hijos[1]^.simbolos=id then
                begin
                          Resultado:= obtenervalor(ts, arbol^.hijos[1]^.lexema);
                          evalexparit2(arbol^.hijos[2], ts, res,resultado, errorStatus);
-                    end
+               end
           else if arbol^.hijos[1]^.simbolos=parentesis1 then
                begin
                          evalexparit(arbol^.hijos[2], ts,resultado);
                          evalexparit2(arbol^.hijos[4], ts, res,resultado, errorStatus);
-                    end
+               end
           else if arbol^.hijos[1]^.simbolos=first then
                begin
                          evalexplistaoid(arbol^.hijos[2], ts, resultadoLista, errorStatus);
                          First(resultadoLista.lista, x);
                          resultado.numero=x;
                          evalexparit2(arbol^.hijos[4], ts, res,resultado, errorStatus);
-            end;
+               end;
      end;
 end;
 
@@ -116,13 +116,13 @@ begin
      if (not(errorStatus)) then
      begin
           if arbol^.hijos[1]^.simbolos=oparit then
-            begin
-		        evalexparit(arbol^.hijos[2], ts,res, errorStatus);
-                  if arbol^.hijos[1]^.lexema = '+' then resultado.numero:=resultado.numero + res.numero
-                  else if arbol^.hijos[1]^.lexema = '-' then resultado.numero:=resultado.numero - res.numero
-                  else if arbol^.hijos[1]^.lexema = '*' then resultado.numero:=resultado.numero * res.numero
-                  else if arbol^.hijos[1]^.lexema = '/' then resultado.numero:=resultado.numero / res.numero;
-		  end;
+               begin
+                    evalexparit(arbol^.hijos[2], ts,res, errorStatus);
+                    if arbol^.hijos[1]^.lexema = '+' then resultado.numero:=resultado.numero + res.numero
+                    else if arbol^.hijos[1]^.lexema = '-' then resultado.numero:=resultado.numero - res.numero
+                    else if arbol^.hijos[1]^.lexema = '*' then resultado.numero:=resultado.numero * res.numero
+                    else if arbol^.hijos[1]^.lexema = '/' then resultado.numero:=resultado.numero / res.numero;
+		     end;
      end;
 end;
 
@@ -193,7 +193,7 @@ begin
           if codigoerror = 0 then
                resultado.numero:=numero;          // No va esto, aca hay que asignar en una lista (teniendo en cuenta si el primer elemento es nil y blablablabla);
                resultado.isReal:=false;                                     // resultado deberia ser de tipo tResultado
-               evallistanum2(arbol^.hijos[2], ts, resultado, errorStatus)
+               evallistanum2(arbol^.hijos[2], ts, resultado, errorStatus);
           end;
      end;
 end;
@@ -216,11 +216,7 @@ begin
           if arbol^.hijos[1]^.simbolos=leerE then
                evalLeerE(arbol^.hijos[1], ts, errorStatus)
           else if arbol^.hijos[1]^.simbolos=leerL then
-               evalLeerL(arbol^.hijos[1], ts, errorStatus)
-          else
-               begin
-                    // errorStatus
-               end;
+               evalLeerL(arbol^.hijos[1], ts, errorStatus);
      end;
 end;
 
@@ -279,10 +275,6 @@ begin
           else if arbol^.hijos[1].simbolos=null then
           begin
                // evaluar lista nula, devuelve boolean
-          end
-          else
-          begin
-               // errorStatus
           end;
      end;
 end;
@@ -306,11 +298,7 @@ begin
      if (not(errorStatus)) then
      begin
           if arbol^.hijos[1]^.simbolos=sino then
-               evalprograma(arbol^.hijos[2], ts, errorStatus)
-          else
-          begin
-               // errorStatus
-          end;
+               evalprograma(arbol^.hijos[2], ts, errorStatus);
      end;
 end;
 
