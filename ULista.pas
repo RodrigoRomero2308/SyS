@@ -1,6 +1,8 @@
 unit ULista;
 interface
 
+uses Utipos, sysutils;
+
 const
 Max=100;
 
@@ -13,7 +15,7 @@ type
                          Sig:TPunteroL;
                          end;
              TLista=Record
-                   dato:array[1..Max] of TElemento;
+                    // dato:array[1..Max] of TElemento;
 	               Cab: TPunteroL;
 	               Tam: 0..Max;
                     end;
@@ -25,6 +27,7 @@ Function Rest(L:TLista):Tlista;
 Function ListaVacia(L:TLista):Boolean;
 Function ListaLlena(L:TLista):Boolean;
 Function ListaTam(L:TLista):Cardinal;
+Function ParseLista(str:string):Tlista;
 
 
 
@@ -79,6 +82,77 @@ end;
 Function ListaTam(L:TLista):Cardinal;
 begin
 ListaTam:=L.Tam;
+end;
+
+Function ParseLista(str:string):Tlista;           // transforma el string en una lista, en el interprete ya se corrobora que el formato sea correcto
+var
+     aux:string;
+     listaAux:tLista;
+     punteroAux, punteroAnt, punteroNodoAux:TPunteroL;
+begin
+     aux:='';
+     CrearLista(listaAux);
+     if str<>'[]' then
+     begin
+          for i := 2 to (Length(str) -1) do
+          begin
+               case str[i] of
+                    '0'..'9': 
+                    begin 
+                         aux:=aux+str[i];
+                    end;
+                    ',': 
+                    begin
+                         punteroAnt:=nil;
+                         punteroAux:=listaAux.cab;
+                         while punteroAux <> nil do
+                         begin
+                              punteroAnt:=punteroAux^.sig;
+                              punteroAux:=punteroAux^.sig;
+                         end;
+                         New(punteroNodoAux);
+                         punteroNodoAux^.info:=StrToInt(aux);
+                         if punteroAnt = nil then
+                         begin
+                              listaAux.cab:=punteroNodoAux;
+                              inc(listaAux.Tam);
+                         end
+                         else
+                         begin
+                              punteroAux:=punteroNodoAux;
+                              punteroAnt.sig:=punteroAux;
+                              inc(listaAux.Tam);
+                         end;
+                    end;
+               else
+                    begin
+                         errorStatus:=true;
+                    end;
+          end;  //al final de este for el ultimo número aun no fue cargado en la lista, por lo cual hay que cargarlo
+          punteroAnt:=nil;
+          punteroAux:=listaAux.cab;
+          while punteroAux <> nil do
+          begin
+               punteroAnt:=punteroAux^.sig;
+               punteroAux:=punteroAux^.sig;
+          end;
+          New(punteroNodoAux);
+          punteroNodoAux^.info:=StrToInt(aux);
+          if punteroAnt = nil then
+          begin
+               listaAux.cab:=punteroNodoAux;
+               inc(listaAux.Tam);
+          end
+          else
+          begin
+               punteroAux:=punteroNodoAux;
+               punteroAnt.sig:=punteroAux;
+               inc(listaAux.Tam);
+          end;
+
+     end
+     else
+          ParseLista:=listaAux;
 end;
 
 begin

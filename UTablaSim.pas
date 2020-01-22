@@ -38,7 +38,7 @@ begin
            begin
                lexema:=lex;
                complex:=comp;
-               val:=0;
+               newTResultado(val);
            end;
       end;
 end;

@@ -18,7 +18,7 @@ Terminales = puntoycoma..pesos;
 elementoTS = record
            lexema:string;
            complex:simbolos;
-           val:real;
+           val:tResultado;
            end;
 
 TS = record
@@ -39,6 +39,8 @@ tResultado = record
           isReal:boolean;
           end;
 
+procedure newTResultado(var resultado: tResultado);
+
 const
 
 stringSimbolos:array [programa..error] of string = ('programa', 'programa2', 'sentencia', 'asig', 'expresion', 'explista','oplista', 'explistaoid',
@@ -52,6 +54,10 @@ stringSimbolos:array [programa..error] of string = ('programa', 'programa2', 'se
 debugMode=true;
 implementation
 
+procedure newTResultado(var resultado: tResultado);
 begin
+    resultado.numero:=-1;
+    CrearLista(resultado.lista);
+end;
 
 end.

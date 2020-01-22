@@ -9,7 +9,22 @@ procedure evalcondicion(arbol: Tarbol; var ts:TS; var estado:boolean);
 
 implementation
 
-// Podemos darnos cuenta si es una lista mirando el primer eleento de la construccion (corchete izquierdo)
+procedure asignar(var ts:TS; lexema:string; X:tResultado; var errorStatus: boolean);
+
+var
+   s:simbolos;
+   pos:byte;
+
+begin
+     if (not(errorStatus)) then
+     begin
+          busquedaenTS(ts, lexema, s, pos);
+          if pos = 0 then
+               errorStatus:=true        // la variable se deberia haber asignado durante el analisis lexico
+          else
+               ts.lista[pos].val:=x;
+     end;
+end;
 
 procedure evalPrograma(arbol: Tarbol; var ts:TS; var errorStatus: boolean);
 begin
@@ -51,6 +66,7 @@ var
 begin
      if (not(errorStatus)) then
      begin
+          newTResultado(resultado);
 		evalExpresion(arbol^.hijos[3], ts, resultado, errorStatus);  // esto crea la instancia de tResultado
 		asignar(ts, arbol^.hijos[1]^.lexema, resultado, errorStatus);  // esto la asigna solamente
      end;
@@ -85,26 +101,33 @@ begin
                begin
                     val(arbol^.hijos[1]^.lexema, numero, codigoerror);     // convierte string en numero
                     if codigoerror = 0 then
-                         resultado.numero:=numero;
-                         resultado.isReal:=true;                                     // resultado deberia ser de tipo tResultado
-                         evalexparit2(arbol^.hijos[2], ts, res,resultado, errorStatus);
+                         begin
+                              newTResultado(res);
+                              resultado.numero:=numero;
+                              resultado.isReal:=true;                                     // resultado deberia ser de tipo tResultado
+                              evalexparit2(arbol^.hijos[2], ts, res,resultado, errorStatus);
+                         end;
                end
           else if arbol^.hijos[1]^.simbolos=id then
                begin
-                         Resultado:= obtenervalor(ts, arbol^.hijos[1]^.lexema);
-                         evalexparit2(arbol^.hijos[2], ts, res,resultado, errorStatus);
+                    newTResultado(res);
+                    Resultado:= obtenervalor(ts, arbol^.hijos[1]^.lexema);
+                    evalexparit2(arbol^.hijos[2], ts, res,resultado, errorStatus);
                end
           else if arbol^.hijos[1]^.simbolos=parentesis1 then
                begin
-                         evalexparit(arbol^.hijos[2], ts,resultado);
-                         evalexparit2(arbol^.hijos[4], ts, res,resultado, errorStatus);
+                    newTResultado(res);
+                    evalexparit(arbol^.hijos[2], ts,resultado);
+                    evalexparit2(arbol^.hijos[4], ts, res,resultado, errorStatus);
                end
           else if arbol^.hijos[1]^.simbolos=first then
                begin
-                         evalexplistaoid(arbol^.hijos[2], ts, resultadoLista, errorStatus);
-                         First(resultadoLista.lista, x);
-                         resultado.numero=x;
-                         evalexparit2(arbol^.hijos[4], ts, res,resultado, errorStatus);
+                    newTResultado(res);
+                    newTResultado(resultadoLista);
+                    evalexplistaoid(arbol^.hijos[2], ts, resultadoLista, errorStatus);
+                    First(resultadoLista.lista, x);
+                    resultado.numero=x;
+                    evalexparit2(arbol^.hijos[4], ts, res,resultado, errorStatus);
                end;
      end;
 end;
@@ -148,11 +171,14 @@ begin
      begin
           if arbol^.hijos[1]^.simbolos=rest then
           begin
+               newTResultado(resultadoLista);
                evalexplista(arbol^.hijos[3], ts, resultadoLista, errorStatus);
                resultado.lista:= Rest(resultadoLista.lista); //errorstatus cambiar en ulista
           end
           else if arbol^.hijos[1]^.simbolos=cons then
           begin
+               newTResultado(resultadoLista);
+               newTResultado(resultadoArit);
                evalexplista(arbol^.hijos[5], ts, resultadoLista, errorStatus);
                evalexparit(arbol^.hijos[3], ts, resultadoArit, errorStatus);
                Cons(resultadoLista.lista, resultadoArit.numero); //errorstatus cambiar en ulista
@@ -221,24 +247,65 @@ begin
 end;
 
 procedure evalLeerE(arbol: Tarbol; var ts:TS; var errorStatus: boolean);
+var
+     resultado: tResultado;
 
 begin
      if (not(errorStatus)) then
      begin
           write(copy(arbol^.hijos[3]^.lexema, 2, Length(arbol^.hijos[3]^.lexema)-2));
           read(X);
-          // asignar a X como número
+          for i := 0 to Length(X) do
+               begin
+                    case X[i] of
+                         '0'..'9': begin end;
+                    else
+                    begin
+                         errorStatus:=true;
+                    end;
+               end;
+          if (not(errorStatus)) then 
+          begin
+               resultado.numero:=X;
+               resultado.isReal:=true;
+               asignar(ts, arbol^.hijos[5]^.lexema, X, errorStatus);
+          end;
      end;
 end;
 
 procedure evalLeerL(arbol: Tarbol; var ts:TS; var errorStatus: boolean);
+var
+     resultado: tResultado;
 
 begin
      if (not(errorStatus)) then
      begin
           write(copy(arbol^.hijos[3]^.lexema, 2, Length(arbol^.hijos[3]^.lexema)-2));
           read(X);
-          // asignar a X como lista (parse del string como una lista, sabemos que es válida por el analisis sintactico)
+          if ((X[1] = '[') and (X[Length(X)] = ']') and (X[2] <> ',') and (X[Length(x) -1] <> ',')) then
+          begin
+               if (X <> '[]') then
+               begin
+                    for i := 2 to (Length(X) -1) do
+                    begin
+                         case X[i] of
+                              '0'..'9': begin end;
+                              ',': begin end;
+                         else
+                         begin
+                              errorStatus:=true;
+                         end;
+                    end;
+               end
+          end
+          else
+               errorStatus:=true;
+          if (not(errorStatus)) then
+          begin
+               resultado.isReal:=false;
+               resultado.lista:=ParseLista(X);
+               asignar(ts, arbol^.hijos[5]^.lexema, X, errorStatus);
+          end;
      end;
 end;
 
@@ -257,20 +324,20 @@ end;
 
 procedure evalcondicion(arbol: Tarbol; var ts:TS; var estado:boolean; var errorStatus: boolean);
 var
-resultado, res:real;
+resultado, res:tResultado;
 begin
      if (not(errorStatus)) then
      begin
           if arbol^.hijos[1].simbolos = exparit then
           begin
-               evalexparit(arbol^.hijos[1], ts, resultado);
-               evalcondicion2(arbol^.hijos[3], ts, res);
-               if arbol^.hijos[2]^.lexema = '=' then estado:=resultado=res
-               else if arbol^.hijos[2]^.lexema = '<' then estado:=resultado<res
-               else if arbol^.hijos[2]^.lexema = '<=' then estado:=resultado<=res
-               else if arbol^.hijos[2]^.lexema = '>' then estado:=resultado>res
-               else if arbol^.hijos[2]^.lexema = '>=' then estado:=resultado>=res
-               else if arbol^.hijos[2]^.lexema = '<>' then estado:=resultado<>res
+               evalexparit(arbol^.hijos[1], ts, resultado, errorStatus);
+               evalexparit(arbol^.hijos[3], ts, res, errorStatus);
+               if arbol^.hijos[2]^.lexema = '=' then estado:=resultado.numero=res.numero
+               else if arbol^.hijos[2]^.lexema = '<' then estado:=resultado.numero<res.numero
+               else if arbol^.hijos[2]^.lexema = '<=' then estado:=resultado.numero<=res.numero
+               else if arbol^.hijos[2]^.lexema = '>' then estado:=resultado.numero>res.numero
+               else if arbol^.hijos[2]^.lexema = '>=' then estado:=resultado.numero>=res.numero
+               else if arbol^.hijos[2]^.lexema = '<>' then estado:=resultado.numero<>res.numero
           end
           else if arbol^.hijos[1].simbolos=null then
           begin
