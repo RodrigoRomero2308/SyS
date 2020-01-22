@@ -9,8 +9,6 @@ procedure evalcondicion(arbol: Tarbol; var ts:TS; var estado:boolean);
 
 implementation
 
-// ------------------- Cambio para admitir valores reales o listas --------------------
-
 // Podemos darnos cuenta si es una lista mirando el primer eleento de la construccion (corchete izquierdo)
 
 procedure evalPrograma(arbol: Tarbol; var ts:TS; var errorStatus: boolean);
@@ -85,7 +83,7 @@ begin
      begin
           if arbol^.hijos[1]^.simbolos=consent then
                begin
-                    val(arbol^.hijos[1]^.lexema, numero, codigoerror);        // convierte string en numero
+                    val(arbol^.hijos[1]^.lexema, numero, codigoerror);     // convierte string en numero
                     if codigoerror = 0 then
                          resultado.numero:=numero;
                          resultado.isReal:=true;                                     // resultado deberia ser de tipo tResultado
@@ -151,13 +149,13 @@ begin
           if arbol^.hijos[1]^.simbolos=rest then
           begin
                evalexplista(arbol^.hijos[3], ts, resultadoLista, errorStatus);
-               resultado.lista:= Rest(resultadoLista.lista); //errorstatus
+               resultado.lista:= Rest(resultadoLista.lista); //errorstatus cambiar en ulista
           end
           else if arbol^.hijos[1]^.simbolos=cons then
           begin
                evalexplista(arbol^.hijos[5], ts, resultadoLista, errorStatus);
                evalexparit(arbol^.hijos[3], ts, resultadoArit, errorStatus);
-               Cons(resultadoLista.lista, resultadoArit.numero); //errorstatus
+               Cons(resultadoLista.lista, resultadoArit.numero); //errorstatus cambiar en ulista
                resultado.lista:= resultadoLista.lista;
           end;
      end;
@@ -175,213 +173,161 @@ begin
      end;
 end;
 
-// ------------------------------------------------------------------------------------
-
-procedure asignar(var ts:TS; lexema:string; X:real);
-
-var
-   s:simbolos;
-   pos:byte;
+procedure evalexplista(arbol: Tarbol; var ts:TS; var resultado: tResultado; var errorStatus: boolean);
 
 begin
-     busquedaenTS(ts, lexema, s, pos);
-     ts.lista[pos].val:=x;
+     if (not(errorStatus)) then
+     begin
+          evallistanum(arbol^.hijos[2], ts, resultado, errorStatus);
+     end;
 end;
 
-function obtenervalor(ts:TS; lexema:string):real;
-
+procedure evallistanum(arbol: Tarbol; var ts:TS; var resultado: tResultado; var errorStatus: boolean);
 var
-   s:simbolos;
-   pos:byte;
+     codigoerror:integer;
 
 begin
-     busquedaenTS(ts, lexema, s, pos);
-     obtenervalor:=ts.lista[pos].val;
+     if (not(errorStatus)) then
+     begin
+          val(arbol^.hijos[1]^.lexema, numero, codigoerror);
+          if codigoerror = 0 then
+               resultado.numero:=numero;          // No va esto, aca hay que asignar en una lista (teniendo en cuenta si el primer elemento es nil y blablablabla);
+               resultado.isReal:=false;                                     // resultado deberia ser de tipo tResultado
+               evallistanum2(arbol^.hijos[2], ts, resultado, errorStatus)
+          end;
+     end;
 end;
 
-procedure evalciclo(arbol: Tarbol; var ts:TS);
+procedure evallistanum2(arbol: Tarbol; var ts: TS; var resultado: tResultado; var errorStatus: boolean);
 var
-estado:boolean;
 begin
-     evalcondicion(arbol^.hijos[2], ts, estado);
-     while estado = true do
-           begin
-           evalprograma(arbol^.hijos[4], ts);
-           evalcondicion(arbol^.hijos[2], ts, estado);
-           end;
+     if (not(errorStatus)) then
+     begin
+          if arbol^.hijos[1]^.simbolos=coma then
+               evallistanum(arbol^.hijos[2], ts, resultado, errorStatus);
+     end;
 end;
 
-procedure evalcondicion(arbol: Tarbol; var ts:TS; var estado:boolean);
+procedure evalLectura(arbol: Tarbol; var ts:TS, var errorStatus: boolean);
+
+begin
+     if (not(errorStatus)) then
+     begin
+          if arbol^.hijos[1]^.simbolos=leerE then
+               evalLeerE(arbol^.hijos[1], ts, errorStatus)
+          else if arbol^.hijos[1]^.simbolos=leerL then
+               evalLeerL(arbol^.hijos[1], ts, errorStatus)
+          else
+               begin
+                    // errorStatus
+               end;
+     end;
+end;
+
+procedure evalLeerE(arbol: Tarbol; var ts:TS; var errorStatus: boolean);
+
+begin
+     if (not(errorStatus)) then
+     begin
+          write(copy(arbol^.hijos[3]^.lexema, 2, Length(arbol^.hijos[3]^.lexema)-2));
+          read(X);
+          // asignar a X como número
+     end;
+end;
+
+procedure evalLeerL(arbol: Tarbol; var ts:TS; var errorStatus: boolean);
+
+begin
+     if (not(errorStatus)) then
+     begin
+          write(copy(arbol^.hijos[3]^.lexema, 2, Length(arbol^.hijos[3]^.lexema)-2));
+          read(X);
+          // asignar a X como lista (parse del string como una lista, sabemos que es válida por el analisis sintactico)
+     end;
+end;
+
+procedure evalEscritura(arbol: Tarbol; var ts:TS; var errorStatus: boolean);
+var 
+     resultado: tResultado;
+
+begin
+     if (not(errorStatus)) then
+     begin
+          evalExpresion(arbol^.hijos[5], ts, resultado, errorStatus);
+          write(copy(arbol^.hijos[3]^.lexema, 2, Length(arbol^.hijos[3]^.lexema)-2));
+          // parseo de tResultado como un string para mostrar por pantalla y mostrar
+     end;
+end;
+
+procedure evalcondicion(arbol: Tarbol; var ts:TS; var estado:boolean; var errorStatus: boolean);
 var
 resultado, res:real;
 begin
-     evalexparit(arbol^.hijos[1], ts, resultado);
-     evalcondicion2(arbol^.hijos[3], ts, res);
-         if arbol^.hijos[2]^.lexema = '=' then estado:=resultado=res
-         else if arbol^.hijos[2]^.lexema = '<' then estado:=resultado<res
-         else if arbol^.hijos[2]^.lexema = '<=' then estado:=resultado<=res
-         else if arbol^.hijos[2]^.lexema = '>' then estado:=resultado>res
-         else if arbol^.hijos[2]^.lexema = '>=' then estado:=resultado>=res
-         else if arbol^.hijos[2]^.lexema = '<>' then estado:=resultado<>res
+     if (not(errorStatus)) then
+     begin
+          if arbol^.hijos[1].simbolos = exparit then
+          begin
+               evalexparit(arbol^.hijos[1], ts, resultado);
+               evalcondicion2(arbol^.hijos[3], ts, res);
+               if arbol^.hijos[2]^.lexema = '=' then estado:=resultado=res
+               else if arbol^.hijos[2]^.lexema = '<' then estado:=resultado<res
+               else if arbol^.hijos[2]^.lexema = '<=' then estado:=resultado<=res
+               else if arbol^.hijos[2]^.lexema = '>' then estado:=resultado>res
+               else if arbol^.hijos[2]^.lexema = '>=' then estado:=resultado>=res
+               else if arbol^.hijos[2]^.lexema = '<>' then estado:=resultado<>res
+          end
+          else if arbol^.hijos[1].simbolos=null then
+          begin
+               // evaluar lista nula, devuelve boolean
+          end
+          else
+          begin
+               // errorStatus
+          end;
+     end;
 end;
 
-procedure evalcondicional1(arbol: Tarbol; var ts:TS);
-begin
-     if arbol^.hijos[1]^.simbolos=sino then
-        evalprograma(arbol^.hijos[2], ts);
-end;
-
-procedure evalcondicional(arbol: Tarbol; var ts:TS);
+procedure evalcondicional(arbol: Tarbol; var ts:TS; var errorStatus: boolean);
 var estado:boolean;
 
 begin
-     evalcondicion(arbol^.hijos[2], ts, estado);
-     if estado=true then
-        evalprograma(arbol^.hijos[4], ts)
-     else
-         evalcondicional1(arbol^.hijos[5], ts);
+     if (not(errorStatus)) then
+          begin
+          evalcondicion(arbol^.hijos[2], ts, estado, errorStatus);
+          if estado=true then
+               evalprograma(arbol^.hijos[4], ts, errorStatus)
+          else
+               evalcondicional1(arbol^.hijos[5], ts, errorStatus);
+     end;
 end;
 
-procedure evalExparit2(arbol: Tarbol; var ts:TS; var res:real; var resultado:real);
-
+procedure evalcondicional1(arbol: Tarbol; var ts:TS; var errorStatus: boolean);
 begin
-     if arbol^.hijos[1]^.simbolos=oparit then
-            begin
-		        evalexparit(arbol^.hijos[2], ts,res);
-                  if arbol^.hijos[1]^.lexema = '+' then resultado.numero:=resultado.numero + res.numero
-                  else if arbol^.hijos[1]^.lexema = '-' then resultado.numero:=resultado.numero - res.numero
-                  else if arbol^.hijos[1]^.lexema = '*' then resultado.numero:=resultado.numero * res.numero
-                  else if arbol^.hijos[1]^.lexema = '/' then resultado.numero:=resultado.numero / res.numero;
-		  end;
+     if (not(errorStatus)) then
+     begin
+          if arbol^.hijos[1]^.simbolos=sino then
+               evalprograma(arbol^.hijos[2], ts, errorStatus)
+          else
+          begin
+               // errorStatus
+          end;
+     end;
 end;
 
-procedure evalExparit(arbol: Tarbol; var ts:TS; var resultado:real);
+procedure evalciclo(arbol: Tarbol; var ts:TS, var errorStatus: boolean);
 var
-res:real;
-numero:real;
-codigoerror:integer;
+estado:boolean;
 begin
-     if arbol^.hijos[1]^.simbolos=consent then
-            begin
-                 val(arbol^.hijos[1]^.lexema, numero, codigoerror);
-                 if codigoerror = 0 then
-                    Resultado:=numero;
-                 evalexparit2(arbol^.hijos[2], ts, res,resultado);
-			end
-       else if arbol^.hijos[1]^.simbolos=id then
-            begin
-			     Resultado:= obtenervalor(ts, arbol^.hijos[1]^.lexema);
-                    evalexparit2(arbol^.hijos[2], ts, res,resultado);
-			end
-   else if arbol^.hijos[1]^.simbolos=parentesis1 then
-            begin
-			         evalexparit(arbol^.hijos[2], ts,resultado);
-                     evalexparit2(arbol^.hijos[4], ts, res,resultado);
-			end;
+     if (not(errorStatus)) then
+     begin
+          evalcondicion(arbol^.hijos[2], ts, estado, errorStatus);
+          while estado = true do
+               begin
+               evalprograma(arbol^.hijos[4], ts, errorStatus);
+               evalcondicion(arbol^.hijos[2], ts, estado, errorStatus);
+               end;
+     end;
 end;
-
-procedure evalexplista(arbol: Tarbol; var ts:TS; var resultado:tResultado);
-begin
-     if arbol^.hijos[1]^.simbolos=oplista then
-        begin
-             evaloplista(arbol^.hijos[1], ts, resultado);
-        end;
-     if arbol^.hijos[1]^.simbolos=lista then
-        begin
-             evallista
-        end;
-end;
-
-
-procedure evalExpresion(arbol: Tarbol; var ts:TS; var resultado:tResultado);   //esto daria real o lista
-begin
-        if arbol^.hijos[1]^.simbolos=exparit then
-            begin
-			         evalexparit(arbol^.hijos[1], ts, resultado);     //esto real
-			end;
-        if arbol^.hijos[1]^.simbolos=explista then
-            begin
-                     evalexplista(arbol^.hijos[1], ts, resultado);    //esto lista
-            end;
-end;
-
-procedure evalAsig(arbol: Tarbol; var ts:TS);
-
-var
-   resultado: tResultado;
-
-begin
-		evalExpresion(arbol^.hijos[3], ts, resultado);
-		asignar(ts, arbol^.hijos[1]^.lexema, resultado);
-end;
-
-procedure evalLeerE(arbol: Tarbol; var ts:TS);
-
-var
-   X:real;
-
-begin
-        write(copy(arbol^.hijos[3]^.lexema, 2, Length(arbol^.hijos[3]^.lexema)-2)); //copia la cadena sin comillas
-		read(X);
-		asignar(ts, arbol^.hijos[5]^.lexema, X);
-end;
-		
-procedure evalEscribirE(arbol: Tarbol; var ts:TS);
-var
-   res:real;
-   aux:string;
-
-begin
-
-		write(copy(arbol^.hijos[3]^.lexema, 2, Length(arbol^.hijos[3]^.lexema)-2)); //copia la cadena sin comillas
-		evalexparit(arbol^.hijos[5], ts, res);
-		writeln(res:3:2);
-end;
-
-procedure evalEscritura(arbol: Tarbol; var ts:TS);
-
-begin
-		if arbol^.hijos[1]^.simbolos=escribirE then
-            begin
-			         evalEscribirE(arbol^.hijos[1], ts);
-			end;
-end;
-
-procedure evalLectura(arbol: Tarbol; var ts:TS);
-
-begin
-		if arbol^.hijos[1]^.simbolos=leerE then
-            begin
-			         evalLeerE(arbol^.hijos[1], ts);
-			end;
-end;
-
-procedure evalSentencia(arbol: Tarbol; var ts:TS);
-begin
-		if arbol^.hijos[1]^.simbolos=asig then
-             evalasig(arbol^.hijos[1], ts)
-        else if arbol^.hijos[1]^.simbolos=lectura then
-             evalLectura(arbol^.hijos[1], ts)
-        else if arbol^.hijos[1]^.simbolos=escritura then
-             evalEscritura(arbol^.hijos[1], ts)
-        else if arbol^.hijos[1]^.simbolos=condicional then
-             evalcondicional(arbol^.hijos[1], ts)
-        else if arbol^.hijos[1]^.simbolos=ciclo then
-             evalciclo(arbol^.hijos[1], ts);
-end;
-
-procedure evalprograma2(arbol: Tarbol; var ts:TS);
-begin
-     if arbol^.hijos[1]^.simbolos=programa then
-        evalprograma(arbol^.hijos[1], ts);
-end;
-
-procedure evalPrograma(arbol: Tarbol; var ts:TS);
-begin
-     evalsentencia(arbol^.hijos[1], ts);
-     evalprograma2(arbol^.hijos[3], ts);
-end;
-
 
 END.
 
