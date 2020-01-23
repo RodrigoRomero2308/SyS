@@ -234,20 +234,15 @@ end;
 procedure evalexplistaoid(arbol: Tarbol; var ts:TS; var resultado: tResultado; var errorStatus: boolean);
 
 begin
-     writeln('Entra');
      if (not(errorStatus)) then
      begin
-          writeln('Entra sin error');
           if arbol^.hijos[1]^.simbolos=explista then
           begin
-               writeln('Mal');
                evalexplista(arbol^.hijos[1], ts, resultado, errorStatus);
           end
           else 
           begin
-               writeln('Bien');
                resultado:= obtenervalor(ts, arbol^.hijos[1]^.lexema, errorStatus);
-               writeln('Obtenida lista de tamanio: ' + IntToStr(resultado.lista.tam));
           end;
      end;
 end;
