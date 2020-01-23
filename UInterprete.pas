@@ -40,16 +40,21 @@ begin
      if (not(errorStatus)) then
      begin
           busquedaenTS(ts, lexema, s, pos);
-          writeln('Asignar Log: lexema:' + lexema + '. pos: ' + IntToStr(pos));
+          if debugMode then writeln('---------------------------------------------');
+          if debugMode then writeln('Asignar Log: lexema:' + lexema + '. pos: ' + IntToStr(pos));
           if pos = 0 then
                errorStatus:=true        // la variable se deberia haber asignado durante el analisis lexico
           else
+               x.asignado:=true;
                ts.lista[pos].val:=x;
-               write('Resultado - Numero: ' + IntToStr(x.numero) + '. Tamaño de lista' + IntToStr(x.lista.tam));
+               if debugMode then writeln('Resultado - Numero: ' + IntToStr(x.numero) + '. Tamaño de lista' + IntToStr(x.lista.tam));
                if x.isReal then
-                    writeln('. Es real')
+                    if debugMode then writeln('. Es real')
                else
-                    writeln('. Es lista');
+               begin
+                    if debugMode then writeln('. Es lista');
+                    if debugMode then writeln('Primer elemento de la lista: ' + IntToStr(x.lista.cab^.info));
+               end;
      end;
 end;
 
@@ -61,18 +66,27 @@ var
 
 begin
      busquedaenTS(ts, lexema, s, pos);
-     writeln('ObtenerValor Log: lexema:' + lexema + '. pos: ' + IntToStr(pos));
+     if debugMode then writeln('---------------------------------------------');
+     if debugMode then writeln('ObtenerValor Log: lexema:' + lexema + '. pos: ' + IntToStr(pos));
      if pos = 0 then 
      begin
           errorStatus:= true;
           writeln('Variable invalida');
      end
      else
-          write('Resultado - Numero: ' + IntToStr(ts.lista[pos].val.numero) + '. Tamaño de lista' + IntToStr(ts.lista[pos].val.lista.tam));
+     begin
+          if not(ts.lista[pos].val.asignado) then
+          begin
+               errorStatus:=true;
+               writeln('Variable no asignada: ' + lexema);
+          end;
+          if debugMode then write('Resultado - Numero: ' + IntToStr(ts.lista[pos].val.numero) + '. Tamaño de lista' + IntToStr(ts.lista[pos].val.lista.tam));
           if ts.lista[pos].val.isReal then
-               writeln('. Es real')
+               if debugMode then writeln('. Es real')
           else
-               writeln('. Es lista');
+               if debugMode then writeln('. Es lista');
+               if debugMode then writeln('Primer elemento de la lista: ' + IntToStr(ts.lista[pos].val.lista.cab^.info));
+     end;
      obtenervalor:=ts.lista[pos].val;
 end;
 
@@ -101,13 +115,14 @@ end;
 procedure evalExparit(arbol: Tarbol; var ts:TS; var resultado:tResultado; var errorStatus: boolean);       // revisar para que asigne valor real en un tResultado
 var
 res:tResultado;
-numero:longint;
+numero:integer;
 codigoerror:integer;
 resultadoLista: tResultado;
-x: longint;
+x: integer;
 begin
      if (not(errorStatus)) then
      begin
+          if debugMode then writeln('El simbolo es: ' + stringSimbolos[arbol^.hijos[1]^.simbolos]);
           if arbol^.hijos[1]^.simbolos=consent then
                begin
                     val(arbol^.hijos[1]^.lexema, numero, codigoerror);     // convierte string en numero
@@ -135,10 +150,11 @@ begin
                begin
                     newTResultado(res);
                     newTResultado(resultadoLista);
-                    evalexplistaoid(arbol^.hijos[2], ts, resultadoLista, errorStatus);
+                    evalexplistaoid(arbol^.hijos[3], ts, resultadoLista, errorStatus);
                     FirstL(resultadoLista.lista, x);
                     resultado.numero:=x;
-                    evalexparit2(arbol^.hijos[4], ts, res,resultado, errorStatus);
+                    resultado.isReal:=true;
+                    evalexparit2(arbol^.hijos[5], ts, res,resultado, errorStatus);
                end;
      end;
 end;
@@ -194,14 +210,15 @@ begin
           if arbol^.hijos[1]^.simbolos=rest then
           begin
                newTResultado(resultadoLista);
-               evalexplista(arbol^.hijos[3], ts, resultadoLista, errorStatus);
+               evalexplistaoid(arbol^.hijos[3], ts, resultadoLista, errorStatus);
+               writeln('La lista es: '+ TResultadoToString(resultadoLista));
                resultado.lista:= RestL(resultadoLista.lista);
           end
           else if arbol^.hijos[1]^.simbolos=cons then
           begin
                newTResultado(resultadoLista);
                newTResultado(resultadoArit);
-               evalexplista(arbol^.hijos[5], ts, resultadoLista, errorStatus);
+               evalexplistaoid(arbol^.hijos[5], ts, resultadoLista, errorStatus);
                evalexparit(arbol^.hijos[3], ts, resultadoArit, errorStatus);
                if resultadoArit.numero=-1 then 
                begin
@@ -217,12 +234,21 @@ end;
 procedure evalexplistaoid(arbol: Tarbol; var ts:TS; var resultado: tResultado; var errorStatus: boolean);
 
 begin
+     writeln('Entra');
      if (not(errorStatus)) then
      begin
+          writeln('Entra sin error');
           if arbol^.hijos[1]^.simbolos=explista then
-               evalexplista(arbol^.hijos[1], ts, resultado, errorStatus)
+          begin
+               writeln('Mal');
+               evalexplista(arbol^.hijos[1], ts, resultado, errorStatus);
+          end
           else 
+          begin
+               writeln('Bien');
                resultado:= obtenervalor(ts, arbol^.hijos[1]^.lexema, errorStatus);
+               writeln('Obtenida lista de tamanio: ' + IntToStr(resultado.lista.tam));
+          end;
      end;
 end;
 
@@ -239,7 +265,7 @@ procedure evallistanum(arbol: Tarbol; var ts:TS; var resultado: tResultado; var 
 var
      punteroAux, punteroAnt, punteroNodoAux:TPunteroL;
      codigoerror:integer;
-     numero:longint;
+     numero:integer;
 begin
      if (not(errorStatus)) then
      begin
@@ -255,6 +281,7 @@ begin
                end;
                New(punteroNodoAux);
                punteroNodoAux^.info:=numero;
+               punteroNodoAux^.sig:=nil;
                if punteroAnt=nil then
                begin
                     resultado.lista.cab:=punteroNodoAux;
@@ -302,7 +329,7 @@ begin
      if (not(errorStatus)) then
      begin
           write(copy(arbol^.hijos[3]^.lexema, 2, Length(arbol^.hijos[3]^.lexema)-2));
-          read(X);
+          readln(X);
           for i := 1 to Length(X) do
                begin
                     case X[i] of
@@ -331,7 +358,8 @@ begin
      if (not(errorStatus)) then
      begin
           write(copy(arbol^.hijos[3]^.lexema, 2, Length(arbol^.hijos[3]^.lexema)-2));
-          read(X);
+          readln(X);
+          if debugMode then writeln('Escribiste: ' + X);
           if ((X[1] = '[') and (X[Length(X)] = ']') and (X[2] <> ',') and (X[Length(x) -1] <> ',')) then
           begin
                if (X <> '[]') then

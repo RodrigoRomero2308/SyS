@@ -5,10 +5,11 @@ uses sysutils;
 
 const
 Max=100;
+debugModeLista=false;
 
 type
 
-             TElemento=longint;
+             TElemento=integer;
              TPunteroL= ^TNodoL;
              TNodoL=record
                          Info:TElemento;
@@ -102,37 +103,46 @@ begin
                     end;
                     ',': 
                     begin
+                         if debugModeLista then writeln('------------------------Parse-------------------');
                          punteroAnt:=nil;
                          punteroAux:=listaAux.cab;
                          while punteroAux <> nil do
                          begin
+                              if debugModeLista then writeln('Puntero en lugar de: '+ IntToStr(punteroAux^.info));
                               punteroAnt:=punteroAux;
                               punteroAux:=punteroAux^.sig;
                          end;
                          New(punteroNodoAux);
                          punteroNodoAux^.info:=StrToInt(aux);
+                         punteroNodoAux^.sig:=nil;
+                         aux:='';
                          if punteroAnt = nil then
                          begin
                               listaAux.cab:=punteroNodoAux;
                               inc(listaAux.Tam);
+                              if debugModeLista then writeln('Se incrementa tamaño de la lista: ' + IntToStr(listaAux.tam));
                          end
                          else
                          begin
                               punteroAnt^.sig:=punteroNodoAux;
                               inc(listaAux.Tam);
+                              if debugModeLista then writeln('Se incrementa tamaño de la lista: ' + IntToStr(listaAux.tam));
                          end;
                     end;
                     else
                          begin
                               errorStatus:=true;
+                              writeln('Error de parseo de lista');
                          end;
                end;
           end;  //al final de este for el ultimo número aun no fue cargado en la lista, por lo cual hay que cargarlo
+          if debugModeLista then writeln('------------------------Parse-------------------');
           punteroAnt:=nil;
           punteroAux:=listaAux.cab;
           while punteroAux <> nil do
           begin
-               punteroAnt:=punteroAux^.sig;
+               if debugModeLista then writeln('Puntero en lugar de: '+ IntToStr(punteroAux^.info));
+               punteroAnt:=punteroAux;
                punteroAux:=punteroAux^.sig;
           end;
           New(punteroNodoAux);
@@ -141,13 +151,16 @@ begin
           begin
                listaAux.cab:=punteroNodoAux;
                inc(listaAux.Tam);
+               if debugModeLista then writeln('Se incrementa tamaño de la lista: ' + IntToStr(listaAux.tam));
           end
           else
           begin
                punteroAux:=punteroNodoAux;
                punteroAnt^.sig:=punteroAux;
                inc(listaAux.Tam);
+               if debugModeLista then writeln('Se incrementa tamaño de la lista: ' + IntToStr(listaAux.tam));
           end;
+          ParseLista:=listaAux;
      end
      else
      begin

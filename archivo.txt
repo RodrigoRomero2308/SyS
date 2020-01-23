@@ -1,2 +1,5 @@
-B:=25;
-escribir("Este es el resultado de B: ", C);
+B:=[1,2,3,4,5,6];
+escribir("B es ", B);
+escribir("El resto de la lista es ", rest(B));
+escribir("Construimos B con 7", cons(7, B));
+escribir("El primero de la lista es ", first(B));

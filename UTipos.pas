@@ -19,6 +19,7 @@ tResultado = record
           numero:integer;
           lista:tLista;
           isReal:boolean;
+          asignado:boolean;
           end;
 
 elementoTS = record
@@ -57,9 +58,10 @@ implementation
 
 procedure newTResultado(var resultado: tResultado);
 begin
-    resultado.numero:=-1;
-    resultado.isReal:=true;         // lo inicializamos de esta manera para decir si fue asignada la variable o no durante la evaluacion del programa
+    resultado.numero:=0;
+    resultado.isReal:=false;         // lo inicializamos de esta manera para decir si fue asignada la variable o no durante la evaluacion del programa
     CrearLista(resultado.lista);
+    resultado.asignado:=false;
 end;
 
 function TResultadoToString(resultado: tResultado):string;
@@ -73,13 +75,17 @@ begin
     end
     else
     begin
+        // writeln('Tamaño de la lista: ' + IntToStr(resultado.lista.tam));
         aux:='[';
         punteroaux:=resultado.lista.cab;
+        if debugMode then writeln('Entra while');
         while punteroaux <> nil do
         begin
             aux:=aux+IntToStr(punteroaux^.info);
             if punteroaux^.sig <> nil then aux:=aux + ',';
+            punteroaux:=punteroaux^.sig;
         end;
+        if debugMode then writeln('Sale while');
         aux:=aux+']';
         TResultadoToString:=aux;
     end;
