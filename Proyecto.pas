@@ -1,8 +1,6 @@
 program Proyecto;
 
-uses crt, UTipos,
-// UInterprete,
-UAnSintactico, UArchivo, UArbol;
+uses crt, UTipos, UInterprete, UAnSintactico, UArchivo, UArbol;
 
 Const
      Cruta='C:\Users\Rodrigo Romero\Desktop\Compu vieja\Facultad\Sintaxis y Semantica de los lenguajes\SyS\';

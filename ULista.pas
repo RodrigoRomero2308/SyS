@@ -21,9 +21,9 @@ type
                     end;
 
 Procedure CrearLista(Var L:TLista);
-Procedure Cons(Var L:TLista; x:TElemento);
-Procedure First(L:TLista;var x:TElemento);
-Function Rest(L:TLista):Tlista;
+Procedure ConsL(Var L:TLista; x:TElemento);
+Procedure FirstL(L:TLista;var x:TElemento);
+Function RestL(L:TLista):Tlista;
 Function ListaVacia(L:TLista):Boolean;
 Function ListaLlena(L:TLista):Boolean;
 Function ListaTam(L:TLista):Cardinal;
@@ -37,7 +37,7 @@ L.Cab:=Nil;
 L.Tam:= 0;
 end;
 
-Procedure Cons(Var L:TLista; x:TElemento);
+Procedure ConsL(Var L:TLista; x:TElemento);
 var Dir: TPunteroL;
 begin
      New(Dir);
@@ -47,23 +47,23 @@ begin
      Inc(L.Tam);
 end;
 
-Procedure First(L:TLista;var x:TElemento);
+Procedure FirstL(L:TLista;var x:TElemento);
 begin
      x:=L.Cab^.info;
 end;
 
-Function Rest(L:TLista):Tlista;
+Function RestL(L:TLista):Tlista;
 
 begin
      if L.Tam=0 then
      begin
-          Rest.cab:=nil;
-          Rest.tam:=0;
+          RestL.cab:=nil;
+          RestL.tam:=0;
      end
      else
      begin
-          Rest.cab:=L.cab^.sig;
-          Rest.tam:=L.tam -1;
+          RestL.cab:=L.cab^.sig;
+          RestL.tam:=L.tam -1;
      end;
 end;
 
