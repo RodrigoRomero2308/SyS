@@ -1,2 +1,2 @@
 B:=25;
-escribir("Este es el resultado de B: ", B);
+escribir("Este es el resultado de B: ", C);

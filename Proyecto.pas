@@ -4,6 +4,8 @@ uses crt, UTipos, UInterprete, UAnSintactico, UArchivo, UArbol;
 
 Const
      Cruta='C:\Users\Rodrigo Romero\Desktop\Compu vieja\Facultad\Sintaxis y Semantica de los lenguajes\SyS\';
+     Version='1.0';
+     GithubURL='https://github.com/RodrigoRomero2308/SyS';
 
 var
    archivo:TArchivo;
@@ -26,6 +28,16 @@ BEGIN
           guardararbol(f,raiz,0);          //transcribe el arbol a un txt
           close(f);
           evalPrograma(Raiz, tabla, errorStatus);
+          if not errorStatus then 
+          begin
+               writeln('Programa finalizado con exito. Version: ' + Version);
+               writeln('Visita nuestro codigo en github: ' + GithubURL);
+          end
+          else
+          begin
+               writeln('Programa finalizado con errores. Version: ' + Version);
+               writeln('Visita nuestro codigo en github: ' + GithubURL);
+          end;
      end
      else
      begin

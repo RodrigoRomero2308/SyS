@@ -40,10 +40,16 @@ begin
      if (not(errorStatus)) then
      begin
           busquedaenTS(ts, lexema, s, pos);
+          writeln('Asignar Log: lexema:' + lexema + '. pos: ' + IntToStr(pos));
           if pos = 0 then
                errorStatus:=true        // la variable se deberia haber asignado durante el analisis lexico
           else
                ts.lista[pos].val:=x;
+               write('Resultado - Numero: ' + IntToStr(x.numero) + '. Tamaño de lista' + IntToStr(x.lista.tam));
+               if x.isReal then
+                    writeln('. Es real')
+               else
+                    writeln('. Es lista');
      end;
 end;
 
@@ -55,11 +61,18 @@ var
 
 begin
      busquedaenTS(ts, lexema, s, pos);
+     writeln('ObtenerValor Log: lexema:' + lexema + '. pos: ' + IntToStr(pos));
      if pos = 0 then 
      begin
           errorStatus:= true;
           writeln('Variable invalida');
-     end;
+     end
+     else
+          write('Resultado - Numero: ' + IntToStr(ts.lista[pos].val.numero) + '. Tamaño de lista' + IntToStr(ts.lista[pos].val.lista.tam));
+          if ts.lista[pos].val.isReal then
+               writeln('. Es real')
+          else
+               writeln('. Es lista');
      obtenervalor:=ts.lista[pos].val;
 end;
 
@@ -354,9 +367,13 @@ var
 begin
      if (not(errorStatus)) then
      begin
+          newTResultado(resultado);
           evalExpresion(arbol^.hijos[5], ts, resultado, errorStatus);
-          write(copy(arbol^.hijos[3]^.lexema, 2, Length(arbol^.hijos[3]^.lexema)-2));
-          writeln(TResultadoToString(resultado));
+          if not(errorStatus) then
+          begin
+               write(copy(arbol^.hijos[3]^.lexema, 2, Length(arbol^.hijos[3]^.lexema)-2));
+               writeln(TResultadoToString(resultado));
+          end;
      end;
 end;
 

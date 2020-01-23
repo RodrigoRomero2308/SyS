@@ -58,6 +58,7 @@ implementation
 procedure newTResultado(var resultado: tResultado);
 begin
     resultado.numero:=-1;
+    resultado.isReal:=true;         // lo inicializamos de esta manera para decir si fue asignada la variable o no durante la evaluacion del programa
     CrearLista(resultado.lista);
 end;
 
