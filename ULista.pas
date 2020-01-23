@@ -1,7 +1,7 @@
 unit ULista;
 interface
 
-uses Utipos, sysutils;
+uses sysutils;
 
 const
 Max=100;
@@ -27,9 +27,7 @@ Function Rest(L:TLista):Tlista;
 Function ListaVacia(L:TLista):Boolean;
 Function ListaLlena(L:TLista):Boolean;
 Function ListaTam(L:TLista):Cardinal;
-Function ParseLista(str:string):Tlista;
-
-
+Function ParseLista(str:string; var errorStatus:Boolean):Tlista;
 
 implementation
 
@@ -84,15 +82,16 @@ begin
 ListaTam:=L.Tam;
 end;
 
-Function ParseLista(str:string):Tlista;           // transforma el string en una lista, en el interprete ya se corrobora que el formato sea correcto
+Function ParseLista(str:string; var errorStatus:Boolean):Tlista;           // transforma el string en una lista, en el interprete ya se corrobora que el formato sea correcto
 var
      aux:string;
      listaAux:tLista;
      punteroAux, punteroAnt, punteroNodoAux:TPunteroL;
+     i: integer;
 begin
      aux:='';
      CrearLista(listaAux);
-     if str<>'[]' then
+     if (str<>'[]') then
      begin
           for i := 2 to (Length(str) -1) do
           begin
@@ -120,14 +119,15 @@ begin
                          else
                          begin
                               punteroAux:=punteroNodoAux;
-                              punteroAnt.sig:=punteroAux;
+                              punteroAnt^.sig:=punteroAux;
                               inc(listaAux.Tam);
                          end;
                     end;
-               else
-                    begin
-                         errorStatus:=true;
-                    end;
+                    else
+                         begin
+                              errorStatus:=true;
+                         end;
+               end;
           end;  //al final de este for el ultimo número aun no fue cargado en la lista, por lo cual hay que cargarlo
           punteroAnt:=nil;
           punteroAux:=listaAux.cab;
@@ -138,7 +138,7 @@ begin
           end;
           New(punteroNodoAux);
           punteroNodoAux^.info:=StrToInt(aux);
-          if punteroAnt = nil then
+          if (punteroAnt = nil) then
           begin
                listaAux.cab:=punteroNodoAux;
                inc(listaAux.Tam);
@@ -146,13 +146,14 @@ begin
           else
           begin
                punteroAux:=punteroNodoAux;
-               punteroAnt.sig:=punteroAux;
+               punteroAnt^.sig:=punteroAux;
                inc(listaAux.Tam);
           end;
-
      end
      else
+     begin
           ParseLista:=listaAux;
+     end;
 end;
 
 begin

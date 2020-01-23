@@ -2,7 +2,7 @@ unit UTipos;
 
 interface
 
-uses ULista;
+uses ULista, sysutils;
 
 type
 
@@ -14,6 +14,12 @@ Simbolos = (programa, programa2, sentencia, asig, expresion, explista, oplista, 
 Variables = programa..ciclo;
 
 Terminales = puntoycoma..pesos;
+
+tResultado = record
+          numero:integer;
+          lista:tLista;
+          isReal:boolean;
+          end;
 
 elementoTS = record
            lexema:string;
@@ -33,13 +39,8 @@ Produccion= record
 
 tablaTAS= Array[Variables,Terminales] of Produccion;
 
-tResultado = record
-          numero:real;
-          lista:tLista;
-          isReal:boolean;
-          end;
-
 procedure newTResultado(var resultado: tResultado);
+function TResultadoToString(resultado: tResultado):string;
 
 const
 
@@ -58,6 +59,29 @@ procedure newTResultado(var resultado: tResultado);
 begin
     resultado.numero:=-1;
     CrearLista(resultado.lista);
+end;
+
+function TResultadoToString(resultado: tResultado):string;
+var
+    punteroaux: TPunteroL;
+    aux:string;
+begin
+    if resultado.isReal then
+    begin
+        TResultadoToString:=IntToStr(resultado.numero);
+    end
+    else
+    begin
+        aux:='[';
+        punteroaux:=resultado.lista.cab;
+        while punteroaux <> nil do
+        begin
+            aux:=aux+IntToStr(punteroaux^.info);
+            if punteroaux^.sig <> nil then aux:=aux + ',';
+        end;
+        aux:=aux+']';
+        TResultadoToString:=aux;
+    end;
 end;
 
 end.

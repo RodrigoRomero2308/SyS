@@ -218,7 +218,7 @@ begin
           val(arbol^.hijos[1]^.lexema, numero, codigoerror);
           if codigoerror = 0 then
                resultado.numero:=numero;          // No va esto, aca hay que asignar en una lista (teniendo en cuenta si el primer elemento es nil y blablablabla);
-               resultado.isReal:=false;                                     // resultado deberia ser de tipo tResultado
+               resultado.isReal:=false;
                evallistanum2(arbol^.hijos[2], ts, resultado, errorStatus);
           end;
      end;
@@ -249,7 +249,7 @@ end;
 procedure evalLeerE(arbol: Tarbol; var ts:TS; var errorStatus: boolean);
 var
      resultado: tResultado;
-
+     i: integer;
 begin
      if (not(errorStatus)) then
      begin
@@ -276,7 +276,7 @@ end;
 procedure evalLeerL(arbol: Tarbol; var ts:TS; var errorStatus: boolean);
 var
      resultado: tResultado;
-
+     i: integer;
 begin
      if (not(errorStatus)) then
      begin
@@ -303,7 +303,7 @@ begin
           if (not(errorStatus)) then
           begin
                resultado.isReal:=false;
-               resultado.lista:=ParseLista(X);
+               resultado.lista:=ParseLista(X, errorStatus);
                asignar(ts, arbol^.hijos[5]^.lexema, X, errorStatus);
           end;
      end;
@@ -330,6 +330,8 @@ begin
      begin
           if arbol^.hijos[1].simbolos = exparit then
           begin
+               newTResultado(resultado);
+               newTResultado(res);
                evalexparit(arbol^.hijos[1], ts, resultado, errorStatus);
                evalexparit(arbol^.hijos[3], ts, res, errorStatus);
                if arbol^.hijos[2]^.lexema = '=' then estado:=resultado.numero=res.numero
@@ -341,7 +343,8 @@ begin
           end
           else if arbol^.hijos[1].simbolos=null then
           begin
-               // evaluar lista nula, devuelve boolean
+               evalexplistaoid(arbol^.hijos[3], ts, resultado, errorStatus);
+               if ListaVacia(resultado.lista) then estado:=true else estado:=false;
           end;
      end;
 end;
