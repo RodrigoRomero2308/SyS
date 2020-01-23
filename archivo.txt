@@ -1,17 +1,2 @@
 B:=25;
-lista:=[2,3,4,1,2,23,3];
-leerEntero("Leemos un entero", EnteroLeido);
-leerLista("Leemos una lista", ListaLeida);
-escribir("Esta es la lista que leimos", ListaLeida);
-escribir("Este es el resultado de una expresion aritmetica", A + (B/2));
-Primero := first([2,3,4,5]);
-ListaConstruida:= cons((2+5-4), Lista);
-ListaSinElPrimero:= rest(ListaConstruida);
-mientras A+B < 10 hacer
-A:=53221;
-fin;
-si x > listaOP entonces
-a:=b+c;
-sino 
-j:=listaOP2;
-fin
+escribir("Este es el resultado de B: ", B);

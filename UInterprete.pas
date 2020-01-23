@@ -4,10 +4,11 @@ interface
 uses CRT, Utipos, Uarbol, UTablaSim, ulista, sysutils;
 
 procedure asignar(var ts:TS; lexema:string; X:tResultado; var errorStatus: boolean);
+function obtenervalor(ts:TS; lexema:string; var errorStatus: boolean):tResultado;
 procedure evalprograma2(arbol: Tarbol; var ts:TS; var errorStatus: boolean);
 procedure evalExparit2(arbol: Tarbol; var ts:TS; var res:tResultado; var resultado:tResultado; var errorStatus: boolean);
-procedure evalExparit(arbol: Tarbol; var ts:TS; var resultado:tResultado; var errorStatus: boolean);       // revisar para que asigne valor real en un tResultado
-procedure evalExpresion(arbol: Tarbol; var ts:TS; var resultado:tResultado; var errorStatus: boolean);   //esto daria real o lista
+procedure evalExparit(arbol: Tarbol; var ts:TS; var resultado:tResultado; var errorStatus: boolean);
+procedure evalExpresion(arbol: Tarbol; var ts:TS; var resultado:tResultado; var errorStatus: boolean);
 procedure evalAsig(arbol: Tarbol; var ts:TS; var errorStatus: boolean);
 procedure evalexplista(arbol: Tarbol; var ts:TS; var resultado: tResultado; var errorStatus: boolean);
 procedure evaloplista(arbol: Tarbol; var ts:TS; var resultado: tResultado; var errorStatus: boolean);
@@ -46,7 +47,7 @@ begin
      end;
 end;
 
-function obtenervalor(ts:TS; lexema:string):tResultado;
+function obtenervalor(ts:TS; lexema:string; var errorStatus: boolean):tResultado;
 
 var
    s:simbolos;
@@ -54,6 +55,11 @@ var
 
 begin
      busquedaenTS(ts, lexema, s, pos);
+     if pos = 0 then 
+     begin
+          errorStatus:= true;
+          writeln('Variable invalida');
+     end;
      obtenervalor:=ts.lista[pos].val;
 end;
 
@@ -96,15 +102,15 @@ begin
                          begin
                               newTResultado(res);
                               resultado.numero:=numero;
-                              resultado.isReal:=true;                                     // resultado deberia ser de tipo tResultado
+                              resultado.isReal:=true;
                               evalexparit2(arbol^.hijos[2], ts, res,resultado, errorStatus);
                          end;
                end
           else if arbol^.hijos[1]^.simbolos=id then
                begin
                     newTResultado(res);
-                    Resultado:= obtenervalor(ts, arbol^.hijos[1]^.lexema);
-                    evalexparit2(arbol^.hijos[2], ts, res,resultado, errorStatus);
+                    Resultado:= obtenervalor(ts, arbol^.hijos[1]^.lexema, errorStatus);
+                    if not(errorStatus) then evalexparit2(arbol^.hijos[2], ts, res,resultado, errorStatus);
                end
           else if arbol^.hijos[1]^.simbolos=parentesis1 then
                begin
@@ -148,8 +154,8 @@ begin
      if (not(errorStatus)) then
      begin
           newTResultado(resultado);
-		evalExpresion(arbol^.hijos[3], ts, resultado, errorStatus);  // esto crea la instancia de tResultado
-		asignar(ts, arbol^.hijos[1]^.lexema, resultado, errorStatus);  // esto la asigna solamente
+		evalExpresion(arbol^.hijos[3], ts, resultado, errorStatus);
+		asignar(ts, arbol^.hijos[1]^.lexema, resultado, errorStatus);
      end;
 end;
 
@@ -184,7 +190,12 @@ begin
                newTResultado(resultadoArit);
                evalexplista(arbol^.hijos[5], ts, resultadoLista, errorStatus);
                evalexparit(arbol^.hijos[3], ts, resultadoArit, errorStatus);
-               ConsL(resultadoLista.lista, resultadoArit.numero); //errorstatus cambiar en ulista
+               if resultadoArit.numero=-1 then 
+               begin
+                    errorStatus:=true;
+                    writeln('Error en el primer parametro del ConsL')     // por si llegara a ser un id que tiene una lista
+               end;
+               ConsL(resultadoLista.lista, resultadoArit.numero);
                resultado.lista:= resultadoLista.lista;
           end;
      end;
@@ -198,7 +209,7 @@ begin
           if arbol^.hijos[1]^.simbolos=explista then
                evalexplista(arbol^.hijos[1], ts, resultado, errorStatus)
           else 
-          // obtenerValor;
+               resultado:= obtenervalor(ts, arbol^.hijos[1]^.lexema, errorStatus);
      end;
 end;
 
@@ -213,6 +224,7 @@ end;
 
 procedure evallistanum(arbol: Tarbol; var ts:TS; var resultado: tResultado; var errorStatus: boolean);
 var
+     punteroAux, punteroAnt, punteroNodoAux:TPunteroL;
      codigoerror:integer;
      numero:longint;
 begin
@@ -221,7 +233,25 @@ begin
           val(arbol^.hijos[1]^.lexema, numero, codigoerror);
           if codigoerror = 0 then
           begin
-               resultado.numero:=numero;          // No va esto, aca hay que asignar en una lista (teniendo en cuenta si el primer elemento es nil y blablablabla);
+               punteroAux:= resultado.lista.cab;            // asignacion al final de la lista
+               punteroAnt:= nil;
+               while punteroAux <> nil do
+               begin
+                    punteroAnt:=punteroAux;
+                    punteroAux:=punteroAux^.sig;
+               end;
+               New(punteroNodoAux);
+               punteroNodoAux^.info:=numero;
+               if punteroAnt=nil then
+               begin
+                    resultado.lista.cab:=punteroNodoAux;
+                    inc(resultado.lista.tam);
+               end
+               else
+               begin
+                    punteroAnt^.sig:=punteroNodoAux;
+                    inc(resultado.lista.tam);
+               end;
                resultado.isReal:=false;
                evallistanum2(arbol^.hijos[2], ts, resultado, errorStatus);
           end;
@@ -260,10 +290,10 @@ begin
      begin
           write(copy(arbol^.hijos[3]^.lexema, 2, Length(arbol^.hijos[3]^.lexema)-2));
           read(X);
-          for i := 0 to Length(X) do
+          for i := 1 to Length(X) do
                begin
                     case X[i] of
-                         '0'..'9': begin end;
+                         '0'..'9': ;
                     else
                          begin
                               errorStatus:=true;
@@ -326,7 +356,7 @@ begin
      begin
           evalExpresion(arbol^.hijos[5], ts, resultado, errorStatus);
           write(copy(arbol^.hijos[3]^.lexema, 2, Length(arbol^.hijos[3]^.lexema)-2));
-          // parseo de tResultado como un string para mostrar por pantalla y mostrar
+          writeln(TResultadoToString(resultado));
      end;
 end;
 

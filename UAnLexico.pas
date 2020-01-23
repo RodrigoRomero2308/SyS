@@ -202,7 +202,7 @@ Begin
           writeln('## SimboloEspecial analisis: Es simboloEspecial');
           writeln('## SimboloEspecial analisis: Lexema: ' + lexema); 
      end
-     else
+     else if debugMode then
      begin
           writeln('## SimboloEspecial analisis: No es simboloEspecial');
      end;

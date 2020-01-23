@@ -106,7 +106,7 @@ begin
                          punteroAux:=listaAux.cab;
                          while punteroAux <> nil do
                          begin
-                              punteroAnt:=punteroAux^.sig;
+                              punteroAnt:=punteroAux;
                               punteroAux:=punteroAux^.sig;
                          end;
                          New(punteroNodoAux);
@@ -118,8 +118,7 @@ begin
                          end
                          else
                          begin
-                              punteroAux:=punteroNodoAux;
-                              punteroAnt^.sig:=punteroAux;
+                              punteroAnt^.sig:=punteroNodoAux;
                               inc(listaAux.Tam);
                          end;
                     end;
