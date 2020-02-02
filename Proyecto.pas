@@ -1,9 +1,9 @@
 program Proyecto;
 
-uses crt, UTipos, UInterprete, UAnSintactico, UArchivo, UArbol;
+uses crt, UTipos, UInterprete, UAnSintactico, UArchivo, UArbol, sysutils;
 
 Const
-     Cruta='C:\Users\Rodrigo Romero\Desktop\Compu vieja\Facultad\Sintaxis y Semantica de los lenguajes\SyS\';
+     // Cruta='C:\Users\Rodrigo Romero\Desktop\Compu vieja\Facultad\Sintaxis y Semantica de los lenguajes\SyS\';
      Version='1.0';
      GithubURL='https://github.com/RodrigoRomero2308/SyS';
 
@@ -13,11 +13,14 @@ var
    Raiz: Tarbol;
    f:text;
    errorStatus:boolean;
+   Cruta: string;
 
 BEGIN
      // To change debug mode go to UTipos and change it in const sector
+     Cruta:=GetCurrentDir;
+     writeln('Ruta: ', Cruta);
      errorStatus:=false;
-     abreFile(archivo,Cruta+'archivo.txt');
+     abreFile(archivo,Cruta+'/archivo.txt');
      writeln('--------------------------------------------');
      writeln('Archivo abierto');
      analisis(archivo,tabla, Raiz, errorStatus);   //carga todo el arbol
@@ -25,7 +28,7 @@ BEGIN
      begin
           writeln('--------------------------------------------');
           writeln('Analisis finalizado');
-          assign(f,Cruta+'arbol.txt');
+          assign(f,Cruta+'/arbol.txt');
           rewrite(f);
           guardararbol(f,raiz,0);          //transcribe el arbol a un txt
           close(f);
@@ -47,7 +50,7 @@ BEGIN
      begin
           writeln('--------------------------------------------');
           writeln('Analisis finalizado con ERRORES');
-          assign(f,Cruta+'arbolError.txt');
+          assign(f,Cruta+'/arbolError.txt');
           rewrite(f);
           guardararbol(f,raiz,0);          //transcribe el arbol a un txt
           close(f);

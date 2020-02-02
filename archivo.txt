@@ -1,5 +1,19 @@
-B:=0;
-mientras B<10 hacer
-B:=B+1;
-escribir("Ahora B es ", B);
+B:=25;
+lista:=[2,3,4,1,2,23,3];
+leerEntero("Leemos un entero: ", A);
+escribir("Esta es la lista que leimos", lista);
+escribir("Este es el resultado de una expresion aritmetica: A + (B/2): ", A + (B/2));
+Primero := first([2,3,4,5]);
+ListaConstruida:= cons((2+5-4), lista);
+ListaSinElPrimero:= rest(ListaConstruida);
+mientras A+B < 10 hacer
+A:=A-20;
 fin;
+si 12 > B entonces
+C:=B+A;
+escribir("C es : ", C);
+sino 
+C:=B;
+escribir("C es : ", C);
+fin;
+leerLista("Leemos una lista: ", ListaLeida);
