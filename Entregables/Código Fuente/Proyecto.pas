@@ -20,10 +20,25 @@ BEGIN
      Cruta:=GetCurrentDir;
      writeln('Ruta: ', Cruta);
      errorStatus:=false;
-     abreFile(archivo,Cruta+'/archivo.txt');
-     writeln('--------------------------------------------');
-     writeln('Archivo abierto');
-     analisis(archivo,tabla, Raiz, errorStatus);   //carga todo el arbol
+     if (paramcount() = 0) or (paramcount() > 2) then
+     begin
+          errorStatus:=true;
+          writeln('Uso del programa: ');
+          writeln('Debe pasar como primer parametro el nombre (comenzando con /) del archivo de texto que contiene el codigo a analizar');
+          writeln('Opcionalmente puede pasar un segundo parametro booleano que sera tomado como debug mode (falso por defecto), si se pasa cualquier otro valor, se tomara el valor por defecto');
+          writeln('0 o mas de 2 parametros resultaran en la visualizacion de este mensaje de ayuda');
+     end
+     else if paramcount() = 2 then 
+     begin
+          if paramstr(2) = 'true' then debugMode:=true else debugMode:=false;
+     end;
+     if not(errorStatus) then
+     begin
+          abreFile(archivo,Cruta+paramstr(1)); //+'/archivo.txt');
+          writeln('--------------------------------------------');
+          writeln('Archivo abierto');
+          analisis(archivo,tabla, Raiz, errorStatus);   //carga todo el arbol
+     end;
      if not errorStatus then
      begin
           writeln('--------------------------------------------');
@@ -38,12 +53,14 @@ BEGIN
                writeln('--------------------------------------------');
                writeln('Programa finalizado con EXITO. Version: ' + Version);
                writeln('Visita nuestro codigo en github: ' + GithubURL);
+               writeln('LS V.Alfajor');
           end
           else
           begin
                writeln('--------------------------------------------');
                writeln('Programa finalizado con ERRORES. Version: ' + Version);
                writeln('Visita nuestro codigo en github: ' + GithubURL);
+               writeln('LS V.Alfajor');
           end;
      end
      else
@@ -55,5 +72,5 @@ BEGIN
           guardararbol(f,raiz,0);          //transcribe el arbol a un txt
           close(f);
      end;
-     //readkey;
+     readkey;
 END.

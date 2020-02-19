@@ -53,7 +53,8 @@ stringSimbolos:array [programa..error] of string = ('programa', 'programa2', 'se
                                                     'leerEntero', 'leerLista', 'escribir', 'cadena','si', 'entonces',
                                                     'fin', 'sino', 'oprel', 'null', 'mientras', 'hacer', 'pesos', 'epsilon', 'error');
 
-debugMode=false;
+var
+debugMode: boolean;
 implementation
 
 procedure newTResultado(var resultado: tResultado);
